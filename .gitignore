@@ -1,0 +1,4 @@
+docs/
+app/bower
+node_modules
+dist
