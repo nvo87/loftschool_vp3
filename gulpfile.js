@@ -90,12 +90,19 @@ var gulp = require('gulp'),							//создание переменных для
 
 	// Подключаем ссылки на bower components
 	gulp.task('wiredep', function () {
+	  gulp.src('app/*.html')
+	    .pipe(wiredep())
+	    .pipe(gulp.dest('app/'))
+	});
+
+	// bower components если пользоваться jade
+/*	gulp.task('wiredep', function () {
 	  gulp.src('app/templates/common/*.jade')
 	    .pipe(wiredep({
 	      ignorePath: /^(\.\.\/)*\.\./
 	    }))
 	    .pipe(gulp.dest('app/templates/common/'))
-	});
+	});*/
 
 	// Запускаем локальный сервер (только после компиляции jade)
 	gulp.task('server', ['jade'], function () {  
@@ -119,7 +126,7 @@ var gulp = require('gulp'),							//создание переменных для
 	});
 
 	// Задача по-умолчанию 
-	gulp.task('default', ['server', 'watch']);
+	gulp.task('default', ['server', 'watch', 'wiredep']);
 
 	// ====================================================
 	// ====================================================
