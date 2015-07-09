@@ -75,13 +75,25 @@ body {
 	height: 535px;
 	margin: 25px;
 	background-color: #F9F2F2;
+	overflow: hidden;
+	position: relative;
 }
 
 
-.window__bg {}
-.bg-img {}
-.window__wm {}
-.wm-img {}
+.window__bg, .window__wm {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.bg-img {
+	width: 100%;
+}
+
+.wm-img {
+	height: 100%;
+	width: 100%;
+}
 
 
 .wm-generator__settings {
