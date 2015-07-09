@@ -32,10 +32,59 @@
     <div class="wrapper">
       <div class="main-content">
         <header class="page-header"></header>
-        <div class="container"> </div>
+        <div class="container"> 
+            <div class="wm-generator clearfix">
+                <div class="wm-generator__main">
+                    <h1 class="main__title">Генератор водяных знаков</h1>
+                    <div class="main__window">
+                        <div class="window__bg">
+                            <img src="" alt="" class="bg-img">
+                        </div>
+                        <div class="window__wm">
+                            <img src="" alt="" class="wm-img">
+                        </div>
+                    </div>
+                </div>
+                <div class="wm-generator__settings">
+                    <h2 class="settings__title">Настройки</h2>
+                    <div class="settings__uploads">
+                        <div class="file-load">
+                            <label class="label">Исходное изображение</label>
+                            <div class="file-load__block">
+                                <input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file" >
+                                <div class="file-load__wrapper">
+                                    <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="project-img-path" name="project-img-path"  data-tooltip="Вы не выбрали изображение"/>
+                                    <button class="file-load__btn"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="file-load">
+                            <label class="label">Исходное изображение</label>
+                            <div class="file-load__block">
+                                <input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file" >
+                                <div class="file-load__wrapper">
+                                    <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="project-img-path" name="project-img-path"  data-tooltip="Вы не выбрали изображение"/>
+                                    <button class="file-load__btn"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings__position">Положение</div>
+                    <div class="settings__transparency">Прозрачность</div>
+                    <div class="settings__buttons">
+                        <form action="/php/download.php">
+                            <button type="reset" class="btn-reset">Сброс</button>
+                            <button type="submit" class="btn-submit">Скачать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
       </div>
     </div>
-    <footer class="page-footer"></footer>
+    <footer class="page-footer">
+        Это мой сайт, пожалуйста не копируйте его.
+    </footer>
     <!-- build:js js/vendor.js -->
     <!--bower:js-->
     <script src="bower/jquery/dist/jquery.js"></script>

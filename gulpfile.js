@@ -105,7 +105,7 @@ var gulp = require('gulp'),							//создание переменных для
 	});*/
 
 	// Запускаем локальный сервер (только после компиляции jade)
-	gulp.task('server', ['jade'], function () {  
+	gulp.task('server', function () {  
 	  browserSync({
 	    notify: false,
 	    port: 9000,
@@ -117,9 +117,10 @@ var gulp = require('gulp'),							//создание переменных для
 
 	// слежка и запуск задач 
 	gulp.task('watch', function () {
-	  gulp.watch('app/templates/**/*.jade', ['jade']);
+//	  gulp.watch('app/templates/**/*.jade', ['jade']);
 	  gulp.watch('bower.json', ['wiredep']);
 	  gulp.watch([
+	  	'app/*.html',
 	    'app/js/**/*.js',
 	    'app/css/**/*.css'
 	  ]).on('change', reload);

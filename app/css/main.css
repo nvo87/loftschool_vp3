@@ -55,5 +55,122 @@ body {
 /* общие классы - конец */
 
 
+.wm-generator {
+	height: 670px;
+}
+
+.wm-generator__main {
+	background-color: #6b6764;
+	width: 700px;
+	display: block;
+	float: left;
+}
+
+.main__title {
+	margin-bottom: 51px;
+
+}
+
+.main__window {
+	height: 535px;
+	margin: 25px;
+	background-color: #F9F2F2;
+}
+
+
+.window__bg {}
+.bg-img {}
+.window__wm {}
+.wm-img {}
+
+
+.wm-generator__settings {
+	float: left;
+	width: 260px;
+	background-color: #f1f1f5;
+	height: 100%;
+}
+
+.settings__title {
+	text-align: center;
+}
+
+.settings__uploads, 
+.settings__position, 
+.settings__transparency, 
+.settings__buttons {
+	padding: 20px;
+	border-bottom: 1px solid #f4c3c2;
+}
+
+
+/*	=	File Load */
+/* Стили для контейнера */
+.file-load {
+	width: 100%;
+}
+
+.file-load__block {
+	position: relative;
+	width: 88%;
+}
+
+.file-load__label {
+
+}
+
+/* работаем с инпутом который конкретно file */
+.file-load__input-file {
+	/* делаем кроссбраузерную прозрачность */
+	filter: alpha(opacity=0);
+	/* Позиционируем абсолютно отсносительно контейнера по правому краю */
+	position: absolute;
+	top: 1px;
+	right: 0;
+	/* 
+	Задаем высоту и делаем шрифт огромным 
+	для того чтобы кнопка "обзор" занимала все пространство контейнера
+	*/
+	height: 45px;
+	font-size: 600px;
+	/* Ставим наш инпут поверх всего содержимого */
+	z-index: 2;
+	cursor: pointer;
+	width: auto;
+	opacity: 0;
+}
+
+/* Стилизируем инпут и кнопку которые под загрузчиком */
+.file-load__input-text{
+	border: 1px solid rgb(72, 203, 232);
+	border-radius: 3px;
+	background-color: rgb(251, 252, 253);
+	font-size: 13px;
+	color: rgb(72, 203, 232);
+	line-height: 1.2;
+	outline: none;
+	resize:none;
+	padding: 6px 10px;
+	width: 100%;
+	height: 25px;
+	z-index: 1;
+	-o-text-overflow: ellipsis;
+	padding-right: 10px;
+	white-space: nowrap;
+	text-overflow: ellipsis;	
+}
+
+.file-load__btn {
+	position: absolute;
+	right: -21px;
+	top: 1px;
+	width: 52px;
+	height: 38px;
+	border: 1px solid #ccc;
+	background: #fff;
+	color: #666;
+	border-radius: 0px 3px 3px 0px;
+	background: url(../img/file-load.png) center center no-repeat rgb(72, 203, 232);
+}
 
 
