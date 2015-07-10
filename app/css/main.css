@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  background: url("../img/backgroung.jpg") no-repeat fixed center center/cover transparent;
+  background: url("../img/background.jpg") no-repeat fixed center center/cover transparent;
   font-family: 'robotolight';
   font-weight: 300;
   color: #2e3641;
@@ -68,7 +68,8 @@ main-window
   background: #fff;
   overflow: hidden;
 }
-.bg-img{
+
+/* .bg-img{
   max-width: 651px;
   max-height: 534px;
   vertical-align: middle;
@@ -81,7 +82,27 @@ main-window
   opacity: .5;
   max-width: 215px;
   max-height: 170px;
+} */
+
+.window__bg, .window__wm {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
+
+.window__wm:hover{
+  cursor: move;
+}
+
+.bg-img {
+  width: 100%;
+}
+
+.wm-img {
+  height: 100%;
+  width: 100%;
+}
+
 
 /*
 settings

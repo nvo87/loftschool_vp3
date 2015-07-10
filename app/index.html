@@ -38,10 +38,10 @@
         <!--main-window--> 
         <div class="main__window clearfix">
           <div class="window__bg">
-            <img src="img/image.jpg" class="bg-img">
-          </div>
-          <div class="window__wm">
-            <img src="img/watermark.png" class="wm-img">
+              <img src="img/bg.jpg" alt="" class="bg-img">
+              <div class="window__wm">
+                  <img src="img/wm.jpg" alt="" class="wm-img">
+              </div>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
               <div class="file-load">
                 <label class="label">Исходное изображение</label>
                 <div class="file-load__block">
-                  <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="project-img-path" name="project-img-path"  data-tooltip="Вы не выбрали изображение">
+                  <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="bg-img-path" name="bg-img-path"  data-tooltip="Вы не выбрали изображение">
                   <button class="file-load__btn"></button>
                   <input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file btn">
                 </div>
@@ -65,9 +65,9 @@
               <div class="file-load">
                 <label class="label">Водяной знак</label>
                 <div class="file-load__block">
-                  <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="project-img-path" name="project-img-path"  data-tooltip="Вы не выбрали изображение">
+                  <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="wm-img-path" name="wm-img-path"  data-tooltip="Вы не выбрали изображение">
                   <button class="file-load__btn"></button>
-                  <input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file btn">
+                  <input type="file" value="" id="wm-file" name="files[]" class="file-load__input-file btn">
                 </div>
               </div>
              </div>
@@ -110,7 +110,7 @@
                   <div class="coordinates__block clearfix">
                     <div class="coordinates__axis x-singl x-multi"></div>
                     <div class="coordinates__input-wrap">
-                      <input type="text" name="x-axis" value="0" class="coordinates__input">
+                      <input type="text" name="x-axis" value="0" class="coordinates__input " id="x-axis">
                     </div>
                     <div class="coordinates__arrows">
                       <div class="coordinates__arrows-up"></div>
@@ -120,7 +120,7 @@
                   <div class="coordinates__block  clearfix">
                     <div class="coordinates__axis y-singl y-multi"></div>
                     <div class="coordinates__input-wrap">
-                      <input type="text" name="y-axis" value="0" class="coordinates__input">
+                      <input type="text" name="y-axis" value="0" class="coordinates__input" id="y-axis">
                     </div>
                     <div class="coordinates__arrows">
                       <div class="coordinates__arrows-up"></div>
