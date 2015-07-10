@@ -1,107 +1,166 @@
 <!DOCTYPE html>
-<html lang="ru-RU">
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<title>Watermark Generator</title>
+	<meta name="description" content="Watermark Generator">
+	<meta name="author" content="Group">
+	<link rel="stylesheet" href="css/style.css"> 
+  <link rel="stylesheet" href="fonts/font.css">
+  <link rel="shortcut icon" href="img/favicon.ico" type="img/x-icon">
+  <link rel="stylesheet" href="bower_components/normalize.css/normalize.css">
+   <script src='js/modernizr.js'></script>
+</head>
 
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Watermark Generator </title>
-    <meta name="description" content="group2_vp3-loftSchool">
-    <meta name="keywords" content="group2_vp3-loftSchool">
-    <meta name="author" content="group2_vp3-loftSchool">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <!-- build:css css/vendor.min.css -->
-    <!-- bower:css-->
-    <link rel="stylesheet" href="bower/normalize.css/normalize.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css fonts/fonts.min.css -->
-    <!-- endbuild -->
-    <!-- build:css css/main.min.css -->
-    <link rel="stylesheet" href="css/main.css">
-    <!-- endbuild -->
-    <!-- build:js js/modernizr.min.js -->
-    <script src="bower/modernizer/modernizr.js"></script>
-    <!-- endbuild -->
-  </head>
+<body>
+  <div class="wrapper">
+    <div class="wm-generator clearfix">
+      <div class="wm-generator__main">
+        <h1 class="main__title">Генератор водяных знаков</h1>
 
-  <body>
-    <!--[if lt IE 7]>
-<p class="browsehappy">Вы используете <strong>устаревший</strong> браузер. Пожалуйста <a href="http://browsehappy.com/">обновите</a> его.</p>
-<![endif]-->
-    <div class="wrapper">
-      <div class="main-content">
-        <header class="page-header"></header>
-        <div class="container"> 
-            <div class="wm-generator clearfix">
-                <div class="wm-generator__main">
-                    <h1 class="main__title">Генератор водяных знаков</h1>
-                    <div class="main__window">
-                        <div class="window__bg">
-                            <img src="img/bg.jpg" alt="" class="bg-img">
-                            <div class="window__wm">
-                                <img src="img/wm.jpg" alt="" class="wm-img">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="wm-generator__settings">
-                    <h2 class="settings__title">Настройки</h2>
-                    <div class="settings__uploads">
-                        <div class="file-load">
-                            <label class="label">Исходное изображение</label>
-                            <div class="file-load__block">
-                                <input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file" >
-                                <div class="file-load__wrapper">
-                                    <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="project-img-path" name="project-img-path"  data-tooltip="Вы не выбрали изображение"/>
-                                    <button class="file-load__btn"></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="file-load">
-                            <label class="label">Исходное изображение</label>
-                            <div class="file-load__block">
-                                <input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file" >
-                                <div class="file-load__wrapper">
-                                    <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="project-img-path" name="project-img-path"  data-tooltip="Вы не выбрали изображение"/>
-                                    <button class="file-load__btn"></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="settings__position">
-                        <div class="settings__position-x"></div>
-                        <div class="settings__position-y"></div>
-                    </div>
-                    <div class="settings__transparency">
-                        Прозрачность
-                    </div>
-                    <div class="settings__buttons">
-                        <form action="/php/download.php">
-                            <button type="reset" class="btn-reset">Сброс</button>
-                            <button type="submit" class="btn-submit">Скачать</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <!--main-window--> 
+        <div class="main__window clearfix">
+          <div class="window__bg">
+            <img src="img/image.jpg" class="bg-img">
+          </div>
+          <div class="window__wm">
+            <img src="img/watermark.png" class="wm-img">
+          </div>
         </div>
       </div>
-    </div>
-    <footer class="page-footer">
-        Это мой сайт, пожалуйста не копируйте его.
-    </footer>
-    <!-- build:js js/vendor.js -->
-    <!--bower:js-->
-    <script src="bower/jquery/dist/jquery.js"></script>
-    <script src="bower/jquery-ui/jquery-ui.js"></script>
-    <!--endbower  -->
-    <!-- endbuild -->
-    <!-- build:js js/main.js -->
-    <script src="js/plugins.js"></script>
-    <script src="js/file-upload.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/watermark.js"></script>
-    <!-- endbuild -->
-  </body>
 
+      <!--settings--> 
+      <div class="wm-generator__settings">
+        <h2 class="settings__title">Настройки</h2>
+        <form action="/php/download.php">
+
+        <!--upload-->
+          <div class="settings__group separate-line">
+            <div class="settings__upload">
+              <div class="file-load">
+                <label class="label">Исходное изображение</label>
+                <div class="file-load__block">
+                  <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="project-img-path" name="project-img-path"  data-tooltip="Вы не выбрали изображение">
+                  <button class="file-load__btn"></button>
+                  <input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file btn">
+                </div>
+              </div>
+              <div class="file-load">
+                <label class="label">Водяной знак</label>
+                <div class="file-load__block">
+                  <input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="project-img-path" name="project-img-path"  data-tooltip="Вы не выбрали изображение">
+                  <button class="file-load__btn"></button>
+                  <input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file btn">
+                </div>
+              </div>
+             </div>
+          </div>
+
+          <!--position-->
+          <div class="settings__group separate-line">
+            <div class="settings__position clearfix">
+              <div class="position__header clearfix">
+                <h3 class="label">Положение</h3>
+                <div class="position__switch">
+                  <div class="switch switch__multi">multi</div>
+                  <div class="switch switch__single switch--active">single</div>
+               </div>
+              </div>
+              <div class="position__body">
+                <div class="position__square-wrap">
+                   <div class="position__square">
+                    <div class="square-tr">
+                      <div class="square-td square-td--active"></div>
+                      <div class="square-td"></div>
+                      <div class="square-td"></div>
+                    </div>
+                    <div class="square-tr">
+                      <div class="square-td"></div>
+                      <div class="square-td"></div>
+                      <div class="square-td"></div>
+                    </div>
+                    <div class="square-tr">
+                      <div class="square-td"></div>
+                      <div class="square-td"></div>
+                      <div class="square-td"></div>
+                    </div>
+                    <div class="multi-line line-vertical"></div>
+                    <div class="multi-line line-horizontal"></div>
+                  </div>
+                </div>
+
+                <div class="position__coordinates">
+                  <div class="coordinates__block clearfix">
+                    <div class="coordinates__axis x-singl x-multi"></div>
+                    <div class="coordinates__input-wrap">
+                      <input type="text" name="x-axis" value="0" class="coordinates__input">
+                    </div>
+                    <div class="coordinates__arrows">
+                      <div class="coordinates__arrows-up"></div>
+                      <div class="coordinates__arrows-down"></div>
+                    </div>
+                  </div>
+                  <div class="coordinates__block  clearfix">
+                    <div class="coordinates__axis y-singl y-multi"></div>
+                    <div class="coordinates__input-wrap">
+                      <input type="text" name="y-axis" value="0" class="coordinates__input">
+                    </div>
+                    <div class="coordinates__arrows">
+                      <div class="coordinates__arrows-up"></div>
+                      <div class="coordinates__arrows-down"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--transparency-->
+          <div class="settings__group separate-line">
+            <div class="settings__transparency">
+              <h3 class="label">Прозрачность</h3>
+              <div class="transparency__slider">
+                <div class="transparency__bar"></div>
+                <span class="transparency__point"></span>
+              </div>
+            </div>
+          </div>
+
+            
+          <!--buttons-->
+          <div class="settings__group">
+            <div class="settings__buttons">
+              <button type="reset" class="btn-reset">Сброс</button>
+              <button type="submit" class="btn-submit">Скачать</button>
+            </div>
+          </div>
+
+        </form>
+      </div> 
+    </div>
+     
+    <!--side-menu-->   
+    <div class="side-menu">
+      <ul class="side-menu__languages">
+        <li class="languages__item-ru"><a class="languages__link" href="">рус</a></li>
+        <li class="languages__item-en"><a class="languages__link" href="">eng</a></li>
+      </ul>
+      <ul class="side-menu__social">
+        <li class="social__item-like"><a href="" class="social__link">share<span class="social__icon icon-like"></span></a></li>
+        <li class="social__item-fb"><a class="social__link" href="">facebook<span class="social__icon icon-fb"></span></a></li>
+        <li class="social__item-tw"><a class="social__link" href="">twitter<span class="social__icon icon-tw"></span></a></li>
+        <li class="social__item-vk"><a class="social__link" href="">vkontakte<span class="social__icon icon-vk"></span></a></li>
+      </ul>
+    </div>
+
+    <!--footer--> 
+    <footer class="page-footer">
+      <p class="page-footer__text">© 2015. Это мой сайт, пожалуйста, не копируйте и не воруйте его.</p>
+    </footer>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="js/jquery.placeholder.js"></script>
+        
+  </div>
+</body>
 </html>
