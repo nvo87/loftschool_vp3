@@ -1,0 +1,15 @@
+{
+    "name": "nvo87/vp1-portpholio",
+    "authors": [
+        {
+            "name": "nvo87",
+            "email": "nvo87@yandex.ru"
+        }
+    ],
+    "require": {
+    	"sybio/image-workshop": "^2.0"
+    },
+    "config":{
+    	"vendor-dir":"app/php/vendor"
+    }
+}
