@@ -9,12 +9,12 @@ $ctype="image/jpg";
 $quality=95;
 
 $bg_layer = ImageWorkshop::initFromPath($path.'bg.jpg');
-$wm_layer = ImageWorkshop::initFromPath($path.'wm.jpg');
+$wm_layer = ImageWorkshop::initFromPath($path.'wm.png');
 
-$wm_positionX = 0;
-$wm_positionY = 0;
+$wm_positionX = $_POST['x-axis'];
+$wm_positionY = $_POST['y-axis'];
 $wm_position="LT";
-$wm_opacity=50; //в процентах
+$wm_opacity=25; //в процентах
 
 // Прозрачность для водяного знака
 $wm_layer->opacity($wm_opacity);
