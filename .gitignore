@@ -4,3 +4,4 @@ app/bower
 node_modules
 app/php/vendor/
 dist
+.DS_Store
