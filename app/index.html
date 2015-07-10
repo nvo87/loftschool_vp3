@@ -1,18 +1,35 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-	<meta charset="utf-8">
-	<title>Watermark Generator</title>
-	<meta name="description" content="Watermark Generator">
-	<meta name="author" content="Group">
-	<link rel="stylesheet" href="css/style.css"> 
-  <link rel="stylesheet" href="fonts/font.css">
-  <link rel="shortcut icon" href="img/favicon.ico" type="img/x-icon">
-  <link rel="stylesheet" href="bower_components/normalize.css/normalize.css">
-   <script src='js/modernizr.js'></script>
-</head>
+<html lang="ru-RU">
 
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Watermark Generator </title>
+    <meta name="description" content="group2_vp3-loftSchool">
+    <meta name="keywords" content="group2_vp3-loftSchool">
+    <meta name="author" content="group2_vp3-loftSchool">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- build:css css/vendor.min.css -->
+    <!-- bower:css-->
+    <link rel="stylesheet" href="bower/normalize.css/normalize.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css fonts/fonts.min.css -->
+    <link rel="stylesheet" href="fonts/font.css">
+    <!-- endbuild -->
+    <!-- build:css css/main.min.css -->
+    <link rel="stylesheet" href="css/main.css">
+    <!-- endbuild -->
+    <!-- build:js js/modernizr.min.js -->
+    <script src="bower/modernizer/modernizr.js"></script>
+    <!-- endbuild -->
+  </head>
+
+  <body>
+      <!--[if lt IE 7]>
+  <p class="browsehappy">Вы используете <strong>устаревший</strong> браузер. Пожалуйста <a href="http://browsehappy.com/">обновите</a> его.</p>
+  <![endif]-->
   <div class="wrapper">
     <div class="wm-generator clearfix">
       <div class="wm-generator__main">
@@ -158,9 +175,18 @@
       <p class="page-footer__text">© 2015. Это мой сайт, пожалуйста, не копируйте и не воруйте его.</p>
     </footer>
 
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="js/jquery.placeholder.js"></script>
-        
-  </div>
-</body>
+    <!-- build:js js/vendor.js -->
+    <!--bower:js-->
+    <script src="bower/jquery/dist/jquery.js"></script>
+    <script src="bower/jquery-ui/jquery-ui.js"></script>
+    <!--endbower  -->
+    <!-- endbuild -->
+    <!-- build:js js/main.js -->
+    <script src="js/plugins.js"></script>
+    <script src="js/file-upload.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/watermark.js"></script>
+    <!-- endbuild -->
+  </body>
+
 </html>
