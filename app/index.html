@@ -39,9 +39,9 @@
                     <div class="main__window">
                         <div class="window__bg">
                             <img src="img/bg.jpg" alt="" class="bg-img">
-                        </div>
-                        <div class="window__wm">
-                            <img src="img/wm.jpg" alt="" class="wm-img">
+                            <div class="window__wm">
+                                <img src="img/wm.jpg" alt="" class="wm-img">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -69,8 +69,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="settings__position">Положение</div>
-                    <div class="settings__transparency">Прозрачность</div>
+                    <div class="settings__position">
+                        <div class="settings__position-x"></div>
+                        <div class="settings__position-y"></div>
+                    </div>
+                    <div class="settings__transparency">
+                        Прозрачность
+                    </div>
                     <div class="settings__buttons">
                         <form action="/php/download.php">
                             <button type="reset" class="btn-reset">Сброс</button>
@@ -88,12 +93,14 @@
     <!-- build:js js/vendor.js -->
     <!--bower:js-->
     <script src="bower/jquery/dist/jquery.js"></script>
+    <script src="bower/jquery-ui/jquery-ui.js"></script>
     <!--endbower  -->
     <!-- endbuild -->
     <!-- build:js js/main.js -->
     <script src="js/plugins.js"></script>
     <script src="js/file-upload.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/watermark.js"></script>
     <!-- endbuild -->
   </body>
 
