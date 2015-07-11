@@ -62,7 +62,7 @@ main-window
 .main__window{
   position: relative;
   max-height: 534px;
-  line-height: 534px;
+  /*line-height: 534px;*/
   width: 651px;
   height: 534px;
   background: #fff;
