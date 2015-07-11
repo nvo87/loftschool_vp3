@@ -5,3 +5,5 @@ node_modules
 app/php/vendor/
 dist
 .DS_Store
+sftpconfig.json
+sftp-config.json
