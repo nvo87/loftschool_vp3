@@ -9,3 +9,4 @@ dist
 composer.lock
 composer.phar
 app/img/result.jpg
+app/php/upload/
