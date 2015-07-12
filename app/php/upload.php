@@ -1,6 +1,7 @@
 <?php 
+require_once 'functions.php';
 // устанавливаем путь к папке для загрузки
-$uploadDir = "../img/";
+$uploadDir = "../img/upload/";
 // устанавливаем валидные MYME-types
 $types = array("image/gif", "image/png", "image/jpeg", "image/pjpeg", "image/x-png");
 // Устанавливаем максимальный размер файла
@@ -34,6 +35,10 @@ else if($file['error'][0] == 0){
         $data['msg'] = "ОК";
         $data['url'] = $uploadDir.str2url($filename).'.'.$extension;
         $data['name'] = str2url($filename).'.'.$extension;
+        // получаем размеры файла
+        $size = getimagesize($data['url']);
+        $data['width'] = $size[0]; //ширина
+        $data['height'] = $size[1]; //высота
     }
     // ошибка при перемещении файла
     else {
