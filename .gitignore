@@ -1,4 +1,5 @@
 .idea
+composer.phar
 docs/
 app/bower
 node_modules

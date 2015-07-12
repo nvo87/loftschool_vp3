@@ -4,29 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "884c0ced2600632089e636a41266a6a6",
+    "hash": "f22c1c333ea1d9520254d536d39b3765",
     "packages": [
         {
             "name": "sybio/image-workshop",
-            "version": "2.0.9",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sybio/ImageWorkshop.git",
-                "reference": "b7f678b51b21c96049bd0a535382520a596d6526"
+                "reference": "14bbecd7b834404b8ea9cc7136f25d1c0e9adbfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sybio/ImageWorkshop/zipball/b7f678b51b21c96049bd0a535382520a596d6526",
-                "reference": "b7f678b51b21c96049bd0a535382520a596d6526",
+                "url": "https://api.github.com/repos/Sybio/ImageWorkshop/zipball/14bbecd7b834404b8ea9cc7136f25d1c0e9adbfc",
+                "reference": "14bbecd7b834404b8ea9cc7136f25d1c0e9adbfc",
                 "shasum": ""
             },
             "require": {
-                "ext-exif": "*",
-                "ext-gd": "*",
                 "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.5"
             },
             "type": "library",
             "autoload": {
@@ -34,7 +29,7 @@
                     "PHPImageWorkshop": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "notification-url": "http://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -43,10 +38,6 @@
                     "name": "Clément Guillemain",
                     "homepage": "http://clementguillemain.fr",
                     "role": "Developer / Freelancer"
-                },
-                {
-                    "name": "ImageWorkshop Community",
-                    "homepage": "https://github.com/Sybio/ImageWorkshop/graphs/contributors"
                 }
             ],
             "description": "Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP)",
@@ -62,7 +53,7 @@
                 "thumbnail",
                 "watermark"
             ],
-            "time": "2015-07-05 09:09:12"
+            "time": "2014-08-01 12:01:59"
         }
     ],
     "packages-dev": [],

@@ -343,6 +343,7 @@ position
   cursor: pointer;
   height: 22px;
   width: 18px;
+    display: block;
 }
 .coordinates__arrows-up:hover{
   background: url(../img/sprite.png) -34px -45px no-repeat;
@@ -353,12 +354,12 @@ position
   cursor: pointer;
   height: 22px;
   width: 18px;
+    display: block;
 }
 .coordinates__arrows-down:hover{
   background: url(../img/sprite.png) -34px -70px no-repeat;
    cursor: pointer;
 }
-
 /*
 .x-multi{
   background: url(../img/sprite.png) -77px -59px no-repeat;
@@ -401,6 +402,7 @@ transparency
   border-radius: 3px;
   background: #dbe1e8;
   margin-top:30px;
+    position: relative;
 }
 .transparency__bar{
   height: 3px;
@@ -413,7 +415,7 @@ transparency
   height: 25px;
   width: 25px;
   background: url(../img/sprite.png) -119px -58px no-repeat;
-  top: 35px;
+  top: -11px;
   margin-left: -11px;
   cursor: pointer;
   outline: 0;
