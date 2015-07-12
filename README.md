@@ -8,3 +8,6 @@
 Для сборки проекта выполнить команду <i>gulp dist</i>
 
 Деплой проекта производиться вручную.
+
+
+[![Join the chat at https://gitter.im/nvo87/loftschool_vp3](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nvo87/loftschool_vp3?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
