@@ -1,30 +1,32 @@
-;var fileUpload = (function(){
+$(function () {
+    'use strict';
 
-	var wrapper = $('.field-file-upload'),
-		input = wrapper.find('input'),
-		fakeInput = wrapper.find('.fake-input-text'),
-		fileAPI = (window.File && window.FileReader && window.FileList && window.Blob) ? true : false;
+    // Change this to the location of your server-side upload handler:
+    var url = './php/upload/',
+    	formFile = $('.file-load__input-file');
+    formFile.fileupload({
+        url: url,
+        allowedTypes:"png,gif,jpg,jpeg",
+        dataType: 'json',
+        add: function (e, data) {
+            data.submit();
+        },
+        done: function (e, data) {
+    	 	var fakeInput = $(this).parent().find('.file-load__input-text'),
+    	 		fakeInputID = $(this).attr('id');
+	    	 $.each(data.result.files, function (index, file) {
+	    	 	fakeInput.val(file.name);
+	   			fileLoadWindow(file.url, fakeInputID);
+	        });
+        }
+    });
 
-	return {
-		init: function(){
-			this.setupListeners();
-		},
-		setupListeners: function(){
-			input.on('change', getFileName);
-		}
-	};
-
-	function getFileName(e){
-		e.preventDefault();
-		var fileName;
-		if (fileAPI && input[0].files[0]) {
-			fileName = input[0].files[0].name;
-		} else {
-			fileName = input.val().replace('C:\\fakepath\\', '');
-		}
-		if (!fileName.length)
-			return;
-		fakeInput.text(fileName);
-	}
-
-})();
+    function fileLoadWindow(url, img){
+    	if (img === 'bg-file') {
+    		$('.bg-img').attr('src', url);
+    	} else if (img === 'wm-file') {
+			$('.wm-img').attr('src', url);
+    	}
+    };
+    
+});

@@ -1,10 +1,23 @@
 {
-  "name": "dz1_dima",
+  "name": "vp3_project",
   "dependencies": {
     "jquery": "1.11",
     "normalize.css": "~3.0.3",
     "modernizer": "~2.8.2",
     "jquery-ui": "~1.11.4",
-    "jquery-ui-slider": "*"
+    "jquery-ui-slider": "*",
+    "blueimp-file-upload": "~9.10.4"
+  },
+  "overrides": {
+    "blueimp-file-upload": {
+      "main": [
+        "js/jquery.fileupload.js",
+        "js/vendor/jquery.ui.widget.js",
+        "js/jquery.iframe-transport.js"
+      ],
+      "dependencies": {
+        
+      }
+    }
   }
 }
