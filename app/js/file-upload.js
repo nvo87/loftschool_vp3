@@ -4,6 +4,7 @@ $(function () {
     // Change this to the location of your server-side upload handler:
     var url = './php/upload/',
     	formFile = $('.file-load__input-file');
+    	
     formFile.fileupload({
         url: url,
         allowedTypes:"png,gif,jpg,jpeg",
@@ -28,5 +29,5 @@ $(function () {
 			$('.wm-img').attr('src', url);
     	}
     };
-    
+
 });
