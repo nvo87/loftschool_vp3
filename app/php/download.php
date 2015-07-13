@@ -4,17 +4,30 @@ use PHPImageWorkshop\ImageWorkshop;
 
 $path='../img/upload/';
 $result_name='result.jpg';
-$result_file='../img/upload/'.$result_name;
+$result_file=$path.$result_name;
 $ctype="image/jpg";
 $quality=95;
 
-$bg_layer = ImageWorkshop::initFromPath($path.$_POST['bg-img-path']);
-$wm_layer = ImageWorkshop::initFromPath($path.$_POST['wm-img-path']);
+
+$bg_image = $path.$_POST['bg-img-path'];
+$wm_image = $path.$_POST['wm-img-path'];
+$bg_layer = ImageWorkshop::initFromPath($bg_image);
+$wm_layer = ImageWorkshop::initFromPath($wm_image);
 
 $wm_positionX = $_POST['x-axis'];
 $wm_positionY = $_POST['y-axis'];
 $wm_position="LT";
 $wm_opacity=$_POST['transparency']*100; //в процентах
+
+//Пересчет позиции ватермарки с учетом реального размера картинки
+$bg_size = getimagesize($bg_image);
+$bg_width = $bg_size[0];
+$bg_height = $bg_size[1];
+
+$k_x = $bg_width / 650; // Считаем коэффициент сдвига .650 - ширина окна. Вывести сюда данные через js
+$k_y = $bg_height / 535; // Считаем коэффициент сдвига .535 - высота окна. Вывести сюда данные через js
+$wm_positionX_real = $k_x * $wm_positionX;
+$wm_positionY_real = $k_y * $wm_positionY;
 
 // Прозрачность для водяного знака
 $wm_layer->opacity($wm_opacity);
@@ -28,7 +41,7 @@ $wm_layer->opacity($wm_opacity);
  * $mainLayer->addLayerOnTop($layer, $positionX, $positionY, $position);
  */
 
-$bg_layer->addLayerOnTop($wm_layer, $wm_positionX, $wm_positionY, $wm_position);
+$bg_layer->addLayerOnTop($wm_layer, $wm_positionX_real, $wm_positionY_real, $wm_position);
 
 /**
  * Сохраняет изображение по указанному пути
@@ -44,14 +57,14 @@ $bg_layer->addLayerOnTop($wm_layer, $wm_positionX, $wm_positionY, $wm_position);
 $bg_layer->save($path, $result_name, true, null, $quality);
 
 // Если требуется показать созданное изображение в браузере
-$image = $bg_layer->getResult();
+/*$image = $bg_layer->getResult();
 header('Content-type: image/jpeg');
 header('Content-Disposition: filename="result.jpg"');
 imagejpeg($image, null, $quality);
-exit;
+exit;*/
 
 //отдаем файл на скачивание
-/*header('Content-Description: File Transfer');
+header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename=' . basename($result_file));
 header('Content-Transfer-Encoding: binary');
@@ -59,6 +72,6 @@ header('Expires: 0');
 header('Cache-Control: must-revalidate');
 header('Pragma: public');
 header('Content-Length: ' . filesize($result_file));
-readfile($result_file);*/
+readfile($result_file);
 exit;
  ?>
