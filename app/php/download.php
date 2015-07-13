@@ -2,19 +2,19 @@
 require 'vendor/autoload.php';	
 use PHPImageWorkshop\ImageWorkshop;
 
-$path='../img/';
+$path='../img/upload/';
 $result_name='result.jpg';
-$result_file='../img/'.$result_name;
+$result_file='../img/upload/'.$result_name;
 $ctype="image/jpg";
 $quality=95;
 
-$bg_layer = ImageWorkshop::initFromPath($path.'bg.jpg');
-$wm_layer = ImageWorkshop::initFromPath($path.'wm.png');
+$bg_layer = ImageWorkshop::initFromPath($path.$_POST['bg-img-path']);
+$wm_layer = ImageWorkshop::initFromPath($path.$_POST['wm-img-path']);
 
 $wm_positionX = $_POST['x-axis'];
 $wm_positionY = $_POST['y-axis'];
 $wm_position="LT";
-$wm_opacity=25; //в процентах
+$wm_opacity=$_POST['transparency']*100; //в процентах
 
 // Прозрачность для водяного знака
 $wm_layer->opacity($wm_opacity);
@@ -44,14 +44,14 @@ $bg_layer->addLayerOnTop($wm_layer, $wm_positionX, $wm_positionY, $wm_position);
 $bg_layer->save($path, $result_name, true, null, $quality);
 
 // Если требуется показать созданное изображение в браузере
-/*$image = $bg_layer->getResult();
+$image = $bg_layer->getResult();
 header('Content-type: image/jpeg');
 header('Content-Disposition: filename="result.jpg"');
 imagejpeg($image, null, $quality);
-exit;*/
+exit;
 
 //отдаем файл на скачивание
-header('Content-Description: File Transfer');
+/*header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename=' . basename($result_file));
 header('Content-Transfer-Encoding: binary');
@@ -59,6 +59,6 @@ header('Expires: 0');
 header('Cache-Control: must-revalidate');
 header('Pragma: public');
 header('Content-Length: ' . filesize($result_file));
-readfile($result_file);
+readfile($result_file);*/
 exit;
  ?>

@@ -13,7 +13,6 @@
     <!-- build:css css/vendor.min.css -->
     <!-- bower:css-->
     <link rel="stylesheet" href="bower/normalize.css/normalize.css" />
-    <link rel="stylesheet" href="bower/jquery-ui-slider/jquery-ui.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css fonts/fonts.min.css -->
@@ -21,6 +20,7 @@
     <!-- endbuild -->
     <!-- build:css css/main.min.css -->
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/slider.css">
     <!-- endbuild -->
     <!-- build:js js/modernizr.min.js -->
     <script src="bower/modernizer/modernizr.js"></script>
@@ -138,8 +138,8 @@
             <div class="settings__transparency">
               <h3 class="label">Прозрачность</h3>
               <div class="transparency__slider">
-                <div class="transparency__bar"></div>
                 <span class="transparency__point ui-slider-handle ui-state-default ui-corner-all"></span>
+                <input type="hidden" class="transparency__input--hidden" name="transparency" value="0.5">
               </div>
             </div>
           </div>
@@ -179,8 +179,7 @@
     <!-- build:js js/vendor.js -->
     <!--bower:js-->
     <script src="bower/jquery/dist/jquery.js"></script>
-    <script src="bower/jquery-ui/jquery-ui.js"></script>
-    <script src="bower/jquery-ui-slider/jquery-ui.js"></script>
+    <script src="bower/jquery-ui/jquery-ui.js"></script>   
     <script src="bower/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="bower/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
     <script src="bower/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
@@ -193,6 +192,7 @@
     <script src="js/watermark.js"></script>
     <script src="js/coordinates.js"></script>
     <script src="js/watermark-opacity.js"></script>
+    <script src="js/slider.js"></script>
     <!-- endbuild -->
   </body>
 </html>

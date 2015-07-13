@@ -5,10 +5,8 @@ node_modules
 app/php/vendor/
 dist
 .DS_Store
-sftpconfig.json
-sftp-config.json
-.htaccess
 composer.lock
 composer.phar
-app/img/result.jpg
-app/php/upload/
+app/img/upload/
+sftpconfig.json
+sftp-config.json
