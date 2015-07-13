@@ -5,7 +5,6 @@ node_modules
 app/php/vendor/
 dist
 .DS_Store
-.htaccess
 composer.lock
 composer.phar
 app/img/result.jpg
