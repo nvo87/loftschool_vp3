@@ -8,5 +8,7 @@ dist
 composer.lock
 composer.phar
 app/img/upload/
+app/php/upload/files/
 sftpconfig.json
 sftp-config.json
+.htaccess

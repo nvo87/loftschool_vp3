@@ -59,7 +59,7 @@ generator
 /*
 main-window
 */
-.main__window{
+.main__window {
   position: relative;
   max-height: 534px;
   /* line-height: 534px; */
@@ -67,6 +67,7 @@ main-window
   height: 534px;
   background: #fff;
   overflow: hidden;
+  text-align: center;
 }
 
 /* .bg-img{
@@ -84,7 +85,13 @@ main-window
   max-height: 170px;
 } */
 
-.window__bg, .window__wm {
+.window__bg {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  margin: auto;
+  /*width: 600px; height: 423px;*/
+}
+.window__wm {
   position: absolute;
   left: 0;
   top: 0;
@@ -95,7 +102,8 @@ main-window
 }
 
 .bg-img {
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .wm-img {
