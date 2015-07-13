@@ -404,11 +404,6 @@ transparency
   margin-top:30px;
     position: relative;
 }
-.transparency__bar{
-  height: 3px;
-  background: #9eb2c0;
-  width: 50%;
-}
 .transparency__point{
   position: absolute;
   z-index: 2;
