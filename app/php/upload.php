@@ -3,6 +3,9 @@ require_once 'functions.php';
 // устанавливаем путь к папке для загрузки
 $rootDir = "img/upload/";         //путь для подстановки в index.html, сделано чтобы работало когда сайт лежит не только в корне
 $uploadDir = "../".$rootDir;    //путь для сохранения на сервере, относительно этого php файла
+if (!is_dir($uploadDir)) {
+	mkdir($uploadDir, 0700);
+}
 // устанавливаем валидные MYME-types
 $types = array("image/gif", "image/png", "image/jpeg", "image/pjpeg", "image/x-png");
 // Устанавливаем максимальный размер файла
