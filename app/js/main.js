@@ -20,6 +20,7 @@ jQuery(window).load(function() {
 			_wmHeight	= _wmWindow.height(),
 
 			_settingsForm 	= $('.wm-generator__settings'),						//блок с настройками
+			_settingsMode	= 'position',										//режим в котором работаем, position - перемещение ватермарки, clone - клонириование
 
 			_uploadsBlock 	= _settingsForm.find('.settings__upload'),			//блок загрузки файлов
 				_fileInput	= _uploadsBlock.find('.file-load__input-file'),		//получение файл-инпутов на форме
@@ -40,7 +41,7 @@ jQuery(window).load(function() {
 
 		function _setUpListeners () {
 			_wmWindow.on('mousemove', _getCoordinates);	//выводить координаты ватермарки при перетаскивании ее мышкой
-			_arrows.on('click', _changeCoordinates);	//перемещение ватермарки при нажатии на кнопки X и Y
+			_arrows.on('click', _arrowsClickHandler);	//перемещение ватермарки при нажатии на кнопки X и Y
 			_squares.on('click', _positionWM);			//позиционирование ватермарки по опорным точкам фоновой картинки
 		}
 
@@ -164,16 +165,35 @@ jQuery(window).load(function() {
 			$this.addClass('square-td--active');
 		} //end _positionWM()
 
-		/*Обработка нажатия по стрелочкам в режиме перемещения ватермарки*/
-		function _changeCoordinates (e) {
+		function _arrowsClickHandler (e) {
 			e.preventDefault();
+
+			if (_settingsMode === 'position') {					//режим перемещения ватермарки
+				
+				var arrow 	=$(this), 							//сохраняем стрелку по которой нажали
+					axis 	= arrow.attr('data-axis'),			//получение по какой оси работает кнопка
+					dir 	= arrow.attr('data-dir');			//получение направления действия кнопки (увеличить или уменьшить)
+
+				_changeCoordinates(axis, dir); 					//перемещение ватермарки по нужной оси, в нужном направлении
+
+			} else if (_settingsMode === 'clone') {				//режим клонирования ватермарки
+				// вызов функций для режима клонирования
+			}
+		}
+
+		/**
+		 * Перемещение ватермарки после нажатия на стрелочки
+		 * @param  {[string]} axis Ось, по которой перемещать вотремарку
+		 * @param  {[string]} dir  Направление, принимает UP - в сторону увеличения, DOWN - в сторону уменьшения
+		 */
+		function _changeCoordinates (axis, dir) {
+			//e.preventDefault();
 
 			var xEnd 	= _bgWidth - _wmWidth + 1, 			// крайняя позиция X
 				yEnd 	= _bgHeight - _wmHeight + 1, 		// крайняя позиция Y
 				innerX  = _getCoordinates().x,				// текущая X координата ватермарки
 				innerY  = _getCoordinates().y,				// текущая Y координата ватермарки
-				axis 	= $(this).attr('data-axis'),		// получение к какой оси относится кнопка
-				dir 	= $(this).attr('data-dir'),			// получение действия кнопки (увеличить или уменьшить)
+
 				step 	= 5;								// шаг сдвига ватермарки, в пикселях
 
 			if (axis === 'X') {
