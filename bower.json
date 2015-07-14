@@ -17,6 +17,13 @@
       "dependencies": {
         
       }
+    },
+    "jquery-ui": {
+      "main": [
+        "jquery-ui.js",
+        "ui/slider.js",
+        "ui/position.js"
+      ]
     }
   }
 }
