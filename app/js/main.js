@@ -7,7 +7,11 @@ jQuery(window).load(function() {
 			MAX_WIDTH_BG  	 = _window.width() || 651,			//максимальные размеры фоновой картинки, задаются по размерам главного окна
 			MAX_HEIGHT_BG	 = _window.height() || 534,
 			FORMAT_WINDOW_BG = MAX_WIDTH_BG / MAX_HEIGHT_BG,
-			_scaleBG 		 = 1 , 								// запоминает масштаб главной картинки. TODO: избавится от глобальности, че-то стремно
+			_scaleBG 		 = 1 , 								// запоминает масштаб главной картинки
+
+			_switchMulti     = $('.switch__multi'), // включение режима "замостить"
+			MAX_WIDTH_TILE_WM    = 3000, // максимальная ширина окна с кучей ватермарков
+			MAX_HEIGHT_TILE_WM   = 3000, // максимальная высота окна с кучей ватермарком
 			
 			_bgWindow 	= _window.find('.window__bg'),		//контейнер с главным изображением
 			_bgImg 		= $('<img>', {'class': 'bg-img', 'src': ''}),		//заготовка главного изображения
@@ -43,6 +47,7 @@ jQuery(window).load(function() {
 			_wmWindow.on('mousemove', _getCoordinates);	//выводить координаты ватермарки при перетаскивании ее мышкой
 			_arrows.on('click', _arrowsClickHandler);	//перемещение ватермарки при нажатии на кнопки X и Y
 			_squares.on('click', _positionWM);			//позиционирование ватермарки по опорным точкам фоновой картинки
+			_switchMulti.on('click', _tileWatermark);
 		}
 
 		/*инициализация свойства draggable (перетаскивание мышкой)*/
@@ -278,6 +283,35 @@ jQuery(window).load(function() {
 		function _moveWatermark (value, step, axis) {
 			value += step;
 			_wmWindow.css(axis, value);
+		}
+
+		function _tileWatermark () {
+			var widthWM  = _wmWindow.width(),
+				heightWM = _wmWindow.height(),
+				widthWMTile = MAX_WIDTH_TILE_WM - (MAX_WIDTH_TILE_WM % widthWM),
+				heightWMTlie = MAX_HEIGHT_TILE_WM - (MAX_HEIGHT_TILE_WM % heightWM),
+				countWM = Math.round((widthWMTile*heightWMTlie) / (widthWM*heightWM)),
+				htmlWM = '',
+				i = 0;
+
+			_wmWindow
+				.find('img').css({'width': widthWM, 'height': heightWM})
+				.end()
+				.addClass('window__wm_tile')
+				.css({
+					'width': widthWMTile,
+					'height': heightWMTlie,
+					'left': '-300',
+					'top': '-300'
+				});
+
+			while (i < countWM) {
+				htmlWM += _wmWindow.html();
+				i++;
+			};
+
+			_wmWindow.append(htmlWM);
+			
 		}
 
 
