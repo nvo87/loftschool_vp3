@@ -10,12 +10,12 @@ jQuery(window).load(function() {
 			_scaleBG 		 = 1 , 								// запоминает масштаб главной картинки. TODO: избавится от глобальности, че-то стремно
 			
 			_bgWindow 	= _window.find('.window__bg'),		//контейнер с главным изображением
-			_bgImg 		= _bgWindow.find('.bg-img'),		//главное изображение
+			_bgImg 		= $('<img>', {'class': 'bg-img', 'src': ''}),		//заготовка главного изображения
 			_bgWidth	= _bgWindow.width(),
 			_bgHeight	= _bgWindow.height(),
 
 			_wmWindow 	= _window.find('.window__wm'),		//контейнер с вотермаркой
-			_wmImg 		= _wmWindow.find('.wm-img'),		//ватермарка
+			_wmImg 		= $('<img>', {'class': 'wm-img', 'src': ''}),		//заготовка ватермарка
 			_wmWidth	= _wmWindow.width(),
 			_wmHeight	= _wmWindow.height(),
 
@@ -100,10 +100,10 @@ jQuery(window).load(function() {
 			 */
 			function fileLoadWindow(url, widthImg, heightImg, img){
 				if (img === 'bg-file') {
-					_bgImg.attr('src', url);
+					_bgImg.attr('src', url).appendTo(_bgWindow);
 					magicResizer(img, widthImg, heightImg);
 				} else if (img === 'wm-file') {
-					_wmImg.attr('src', url);
+					_wmImg.attr('src', url).appendTo(_wmWindow);
 					magicResizer(img, widthImg, heightImg);
 				}
 			}
