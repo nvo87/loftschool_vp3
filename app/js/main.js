@@ -9,8 +9,8 @@ jQuery(window).load(function() {
 			FORMAT_WINDOW_BG = MAX_WIDTH_BG / MAX_HEIGHT_BG,
 			_scaleBG 		 = 1 , 								// запоминает масштаб главной картинки
 
-			MAX_WIDTH_TILE_WM    = 3000, 					// максимальная ширина окна с кучей ватермарков
-			MAX_HEIGHT_TILE_WM   = 3000, 					// максимальная высота окна с кучей ватермарком
+			MAX_WIDTH_TILE_WM    = MAX_WIDTH_BG*3, 					// максимальная ширина окна с кучей ватермарков
+			MAX_HEIGHT_TILE_WM   = MAX_HEIGHT_BG*3, 				// максимальная высота окна с кучей ватермарком
 			
 			_bgWindow 	= _window.find('.window__bg'),			//контейнер с главным изображением
 			_bgImg 		= $('<img>', {'class': 'bg-img'}),		//заготовка главного изображения
@@ -34,10 +34,14 @@ jQuery(window).load(function() {
 				_yLabel		= _positionBlock.find('.y-multi'),
 				_squares	= _positionBlock.find('.square-td'),				//квадратики для позиционирования по опорным точкам
 				_arrows		= _positionBlock.find('.coordinates_arrows'),		//стрелочки увеличения значений в полях вывода
-				_switchSingle = $('.switch__single'), 							//включение режима "замостить"
+				_switchSingle = $('.switch__single'), 							//выключение режима "замостить"
 				_switchMulti  = $('.switch__multi'), 							//включение режима "замостить"
 				_switchValue  = $('.switch__input--hidden'), 					//скрытый инпут, для передачи режима в php
 				_switchMode	= 'single',											//режим в котором работаем, single - перемещение ватермарки, multi - клонириование
+
+				//_curWMposY = 0; // запоминаем текущую позицию вотермарка,
+				//_curWMposX = 0; // чтобы при необходимости вернуть в исходное состояние
+				_currentDataWM = {};
 
 			_opacityBlock 	= _settingsForm.find('.settings__transparency'),	//блок изменения прозрачности
 				_slider 	= _opacityBlock.find('.transparency__slider'),		//слайдер изменения прозрачности
@@ -52,14 +56,21 @@ jQuery(window).load(function() {
 			_arrows.on('click', _arrowsClickHandler);	//перемещение ватермарки при нажатии на кнопки X и Y
 			_squares.on('click', _positionWM);			//позиционирование ватермарки по опорным точкам фоновой картинки
 			_switchMulti.on('click', _tileWatermark);
-			_switchSingle.on('click', _switchSingleSettings);
+			_switchSingle.on('click', _oneWatermark);
 			_resetBtn.on('click', _resetApp);
 		}
 
 		/*инициализация свойства draggable (перетаскивание мышкой)*/
-		function _draggableInit () {
+		function _draggableInit (contain) {
+			var contVal,
+				contain = contain;
+			if (contain === 'free') {
+				contVal = '';
+			} else {
+				contVal = 'parent';
+			}
 			_wmWindow.draggable({
-				containment: "parent"
+				containment: contVal
 			});
 		}
 
@@ -294,30 +305,70 @@ jQuery(window).load(function() {
 		function _tileWatermark () {
 			var widthWM  = _wmWindow.width(),
 				heightWM = _wmWindow.height(),
-				widthWMTile = MAX_WIDTH_TILE_WM - (MAX_WIDTH_TILE_WM % widthWM),
-				heightWMTlie = MAX_HEIGHT_TILE_WM - (MAX_HEIGHT_TILE_WM % heightWM),
-				countWM = Math.round((widthWMTile*heightWMTlie) / (widthWM*heightWM)),
+				widthWMTile = MAX_WIDTH_TILE_WM - (MAX_WIDTH_TILE_WM % widthWM), // обрезаем лишнюю ширину у контейнера
+				heightWMTlie = MAX_HEIGHT_TILE_WM - (MAX_HEIGHT_TILE_WM % heightWM), // обрезаем лишнюю высоту у контейнера
+				countWM = Math.round((widthWMTile*heightWMTlie) / (widthWM*heightWM)), // считаем кол-во ватермарков, необходимое для заполнения контейнера
 				htmlWM = '',
 				i = 0;
+
+			if (_wmWindow.hasClass('window__wm_tile')) return;
+
+			// сохраняем текущую позицию и размер WM для режима Single
+			_currentDataWM = {
+				'width': widthWM,
+				'height': heightWM,
+				'top': _wmWindow.css('top'),
+				'left': _wmWindow.css('left')
+			};
 
 			_wmWindow
 				.find('img').css({'width': widthWM, 'height': heightWM})
 				.end()
+				.removeClass('window__wm_one')
 				.addClass('window__wm_tile')
 				.css({
 					'width': widthWMTile,
 					'height': heightWMTlie,
-					'left': '-300',
-					'top': '-300'
+					'left': '-'+MAX_WIDTH_BG+'px',
+					'top': '-'+MAX_HEIGHT_BG+'px'
 				});
 
-			while (i < countWM) {
+			while (i < countWM-1) {
 				htmlWM += _wmWindow.html();
 				i++;
 			}
 
 			_wmWindow.append(htmlWM);
-			_switchMultiSettings ();
+			_draggableInit('free'); // инициируем перетаскивание без ограничений
+			_switchMultiSettings();
+
+		}
+
+		function _oneWatermark () {
+			var currentSrcWM  = _wmWindow.find('img:eq(0)').attr('src'),
+				currentWidthWM = _wmWindow.find('img:eq(0)').width(),
+				currentHeightWM = _wmWindow.find('img:eq(0)').height();
+			console.log(currentWidthWM);
+
+			if (_wmWindow.hasClass('window__wm_one')) return;
+
+			_wmWindow
+				.empty()
+				.removeClass('window__wm_tile')
+				.addClass('window__wm_one')
+				.css(_currentDataWM);
+
+			_wmImg
+				.attr('src', currentSrcWM)
+				.css({
+					'width': currentWidthWM,
+					'height': currentHeightWM
+				})
+				.appendTo(_wmWindow);
+
+			//_wmWindow.append(htmlWM);
+			_draggableInit(); // инициируем перетаскивание по-дефолту
+			_switchSingleSettings();
 
 		}
 
