@@ -39,9 +39,7 @@ jQuery(window).load(function() {
 				_switchValue  = $('.switch__input--hidden'), 					//скрытый инпут, для передачи режима в php
 				_switchMode	= 'single',											//режим в котором работаем, single - перемещение ватермарки, multi - клонириование
 
-				//_curWMposY = 0; // запоминаем текущую позицию вотермарка,
-				//_curWMposX = 0; // чтобы при необходимости вернуть в исходное состояние
-				_currentDataWM = {};
+				_currentDataWM = {}; // хранилище текущих данных позиции и размера вотермарка для переключения режима отображения
 
 			_opacityBlock 	= _settingsForm.find('.settings__transparency'),	//блок изменения прозрачности
 				_slider 	= _opacityBlock.find('.transparency__slider'),		//слайдер изменения прозрачности
