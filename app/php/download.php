@@ -9,15 +9,17 @@ $ctype="image/jpg";
 $quality=95;
 
 
-$bg_image = $path.$_POST['bg-img-path'];
+$switch_mode = $_POST['switch_mode'];					//режим работы - одиночная или замостить. Приходит - single или multi
+$bg_image = $path.$_POST['bg-img-path'];				//получение картинки
 $wm_image = $path.$_POST['wm-img-path'];
-$bg_layer = ImageWorkshop::initFromPath($bg_image);
-$wm_layer = ImageWorkshop::initFromPath($wm_image);
-
+$wm_opacity=$_POST['transparency']*100; //в процентах
 $wm_positionX = $_POST['x-axis'];
 $wm_positionY = $_POST['y-axis'];
 $wm_position="LT";
-$wm_opacity=$_POST['transparency']*100; //в процентах
+
+//создание слоя
+$bg_layer = ImageWorkshop::initFromPath($bg_image);		
+$wm_layer = ImageWorkshop::initFromPath($wm_image);
 
 //Пересчет позиции ватермарки с учетом реального размера картинки
 $bg_size = getimagesize($bg_image);

@@ -80,6 +80,7 @@
 								<div class="position__switch">
 									<div class="switch switch__multi">multi</div>
 									<div class="switch switch__single switch--active">single</div>
+									<input type="hidden" value="single" class="switch__input--hidden" name="switch_mode">
 							 </div>
 							</div>
 							<div class="position__body">
@@ -137,7 +138,7 @@
 							<h3 class="label">Прозрачность</h3>
 							<div class="transparency__slider">
 								<span class="transparency__point ui-slider-handle ui-state-default ui-corner-all"></span>
-								<input type="hidden" class="transparency__input--hidden" name="transparency" value="0.5">
+								<input type="hidden" class="transparency__input--hidden" name="transparency" value="1">
 							</div>
 						</div>
 					</div>
@@ -186,7 +187,7 @@
 		<!--endbower  -->
 		<!-- endbuild -->
 		<!-- build:js js/main.js -->
-		<script src="js/switch.js"></script>
+		<!-- <script src="js/switch.js"></script> -->
 		<script src="js/plugins.js"></script>
 		<!-- <script src="js/file-upload.js"></script> -->
 		<script src="js/main.js"></script>

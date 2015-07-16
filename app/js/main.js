@@ -9,22 +9,20 @@ jQuery(window).load(function() {
 			FORMAT_WINDOW_BG = MAX_WIDTH_BG / MAX_HEIGHT_BG,
 			_scaleBG 		 = 1 , 								// запоминает масштаб главной картинки
 
-			_switchMulti     = $('.switch__multi'), // включение режима "замостить"
-			MAX_WIDTH_TILE_WM    = 3000, // максимальная ширина окна с кучей ватермарков
-			MAX_HEIGHT_TILE_WM   = 3000, // максимальная высота окна с кучей ватермарком
+			MAX_WIDTH_TILE_WM    = 3000, 					// максимальная ширина окна с кучей ватермарков
+			MAX_HEIGHT_TILE_WM   = 3000, 					// максимальная высота окна с кучей ватермарком
 			
-			_bgWindow 	= _window.find('.window__bg'),		//контейнер с главным изображением
-			_bgImg 		= $('<img>', {'class': 'bg-img', 'src': ''}),		//заготовка главного изображения
+			_bgWindow 	= _window.find('.window__bg'),			//контейнер с главным изображением
+			_bgImg 		= $('<img>', {'class': 'bg-img'}),		//заготовка главного изображения
 			_bgWidth	= _bgWindow.width(),
 			_bgHeight	= _bgWindow.height(),
 
-			_wmWindow 	= _window.find('.window__wm'),		//контейнер с вотермаркой
-			_wmImg 		= $('<img>', {'class': 'wm-img', 'src': ''}),		//заготовка ватермарка
+			_wmWindow 	= _window.find('.window__wm'),			//контейнер с вотермаркой
+			_wmImg 		= $('<img>', {'class': 'wm-img'}),		//заготовка ватермарка
 			_wmWidth	= _wmWindow.width(),
 			_wmHeight	= _wmWindow.height(),
 
 			_settingsForm 	= $('.wm-generator__settings'),						//блок с настройками
-			_settingsMode	= 'position',										//режим в котором работаем, position - перемещение ватермарки, clone - клонириование
 
 			_uploadsBlock 	= _settingsForm.find('.settings__upload'),			//блок загрузки файлов
 				_fileInput	= _uploadsBlock.find('.file-load__input-file'),		//получение файл-инпутов на форме
@@ -32,8 +30,14 @@ jQuery(window).load(function() {
 			_positionBlock 	= _settingsForm.find('.settings__position'),		//блок позиционирования ватермарки
 				_xInput		= _positionBlock.find('#x-axis'),					//поля для вывода координат ватермарки
 				_yInput		= _positionBlock.find('#y-axis'),
+				_xLabel		= _positionBlock.find('.x-multi'),					//надписи X и Y, либо рисунок стрелочки
+				_yLabel		= _positionBlock.find('.y-multi'),
 				_squares	= _positionBlock.find('.square-td'),				//квадратики для позиционирования по опорным точкам
 				_arrows		= _positionBlock.find('.coordinates_arrows'),		//стрелочки увеличения значений в полях вывода
+				_switchSingle = $('.switch__single'), 							//включение режима "замостить"
+				_switchMulti  = $('.switch__multi'), 							//включение режима "замостить"
+				_switchValue  = $('.switch__input--hidden'), 					//скрытый инпут, для передачи режима в php
+				_switchMode	= 'single',											//режим в котором работаем, single - перемещение ватермарки, multi - клонириование
 
 			_opacityBlock 	= _settingsForm.find('.settings__transparency'),	//блок изменения прозрачности
 				_slider 	= _opacityBlock.find('.transparency__slider'),		//слайдер изменения прозрачности
@@ -48,6 +52,8 @@ jQuery(window).load(function() {
 			_arrows.on('click', _arrowsClickHandler);	//перемещение ватермарки при нажатии на кнопки X и Y
 			_squares.on('click', _positionWM);			//позиционирование ватермарки по опорным точкам фоновой картинки
 			_switchMulti.on('click', _tileWatermark);
+			_switchSingle.on('click', _switchSingleSettings);
+			_resetBtn.on('click', _resetApp);
 		}
 
 		/*инициализация свойства draggable (перетаскивание мышкой)*/
@@ -173,7 +179,7 @@ jQuery(window).load(function() {
 		function _arrowsClickHandler (e) {
 			e.preventDefault();
 
-			if (_settingsMode === 'position') {					//режим перемещения ватермарки
+			if (_switchMode === 'single') {					//режим перемещения ватермарки
 				
 				var arrow 	=$(this), 							//сохраняем стрелку по которой нажали
 					axis 	= arrow.attr('data-axis'),			//получение по какой оси работает кнопка
@@ -181,7 +187,7 @@ jQuery(window).load(function() {
 
 				_changeCoordinates(axis, dir); 					//перемещение ватермарки по нужной оси, в нужном направлении
 
-			} else if (_settingsMode === 'clone') {				//режим клонирования ватермарки
+			} else if (_switchMode === 'multi') {				//режим клонирования ватермарки
 				// вызов функций для режима клонирования
 			}
 		}
@@ -308,12 +314,71 @@ jQuery(window).load(function() {
 			while (i < countWM) {
 				htmlWM += _wmWindow.html();
 				i++;
-			};
+			}
 
 			_wmWindow.append(htmlWM);
-			
+			_switchMultiSettings ();
+
 		}
 
+		function _switchMultiSettings () {
+			_settingsMode = 'multi';
+			_switchValue.val(_settingsMode);	
+			_squares.removeClass('square-td--active');
+			_positionBlock.addClass('wm-multi');
+			_xLabel.removeClass('x-singl');
+			_yLabel.removeClass('y-singl');	
+		}
+
+		function _switchSingleSettings () {
+			_settingsMode = 'single';
+			_switchValue.val(_settingsMode);	
+			_squares.eq(0).addClass('square-td--active');
+			_positionBlock.removeClass('wm-multi');
+			_xLabel.addClass('x-singl');
+			_yLabel.addClass('y-singl');	
+		}
+
+		function _resetApp () {
+			_bgImg.remove();
+			_wmImg.remove();
+
+			var url = './php/reset.php';
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: {},
+				dataType: '',
+			})
+			.done(function() {
+				console.log("папка img/upload/ очищена");
+			})
+			.fail(function() {
+				console.log("ошибка очистки папки");
+			});
+
+		function _submitApp () {
+			var url = './php/test.php';
+
+			$.ajax({
+				url: url,
+				type: 'POST',
+				dataType: '',
+				data: {val: 'value1'},
+			})
+			.done(function() {
+				console.log("success");
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+			
+		}
+			
+		}
 
 		return {
 			init: function () {
