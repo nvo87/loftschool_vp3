@@ -39,7 +39,7 @@ jQuery(window).load(function() {
 				_switchValue  = $('.switch__input--hidden'), 					//скрытый инпут, для передачи режима в php
 				_switchMode	= 'single',											//режим в котором работаем, single - перемещение ватермарки, multi - клонириование
 
-				_currentDataWM = {}; // хранилище текущих данных позиции и размера вотермарка для переключения режима отображения
+				_currentDataWM = {}, // хранилище текущих данных позиции и размера вотермарка для переключения режима отображения
 
 			_opacityBlock 	= _settingsForm.find('.settings__transparency'),	//блок изменения прозрачности
 				_slider 	= _opacityBlock.find('.transparency__slider'),		//слайдер изменения прозрачности
@@ -191,17 +191,16 @@ jQuery(window).load(function() {
 
 		function _arrowsClickHandler (e) {
 			e.preventDefault();
+			var arrow 	= $(this), 							//сохраняем стрелку по которой нажали
+				axis 	= arrow.attr('data-axis'),			//получение по какой оси работает кнопка
+				dir 	= arrow.attr('data-dir');			//получение направления действия кнопки (увеличить или уменьшить)
+
 
 			if (_switchMode === 'single') {					//режим перемещения ватермарки
-				
-				var arrow 	= $(this), 							//сохраняем стрелку по которой нажали
-					axis 	= arrow.attr('data-axis'),			//получение по какой оси работает кнопка
-					dir 	= arrow.attr('data-dir');			//получение направления действия кнопки (увеличить или уменьшить)
+				_changeCoordinates(axis, dir); 				//перемещение ватермарки по нужной оси, в нужном направлении
 
-				_changeCoordinates(axis, dir); 					//перемещение ватермарки по нужной оси, в нужном направлении
-
-			} else if (_switchMode === 'multi') {				//режим клонирования ватермарки
-				// вызов функций для режима клонирования
+			} else if (_switchMode === 'multi') {			//режим клонирования ватермарки
+				_wmMarginChange(axis, dir);
 			}
 		}
 
@@ -220,55 +219,50 @@ jQuery(window).load(function() {
 
 				step 	= 5;								// шаг сдвига ватермарки, в пикселях
 
-			if (/*_switchValue.val('multi')*/_positionBlock.hasClass('wm-multi')){                  // действия при включении режима "замостить"
-				_wmMarginChange(axis, dir)
-			} else {
-				if (axis === 'X') {
-					if (dir === 'UP') {
+			if (axis === 'X') {
+				if (dir === 'UP') {
 
-						if(_checkBorders(innerX, xEnd)) { 				//проверка границ, текущей координаты innerX в пределах xEnd
-							_moveWatermark(innerX, step, 'left');		//сдвинуть ватермарку, с координаты innerX на величину step по оси X
-							_getCoordinates();							//вывести конечные координаты в поля X, Y
-						} else {
-							_moveWatermark(0, 0, 'left');			//если вылазит за границу, то сбросить на начала экрана - сдвигать с координаты 0.
-							_getCoordinates();	
-						}		
+					if(_checkBorders(innerX, xEnd)) { 				//проверка границ, текущей координаты innerX в пределах xEnd
+						_moveWatermark(innerX, step, 'left');		//сдвинуть ватермарку, с координаты innerX на величину step по оси X
+						_getCoordinates();							//вывести конечные координаты в поля X, Y
+					} else {
+						_moveWatermark(0, 0, 'left');			//если вылазит за границу, то сбросить на начала экрана - сдвигать с координаты 0.
+						_getCoordinates();	
+					}		
 
-					} else if (dir === 'DOWN') {
+				} else if (dir === 'DOWN') {
 
-						if(_checkBorders(innerX, xEnd)) {
-							_moveWatermark(innerX, -step, 'left');
-							_getCoordinates();
-						} else {
-							_moveWatermark(xEnd , 0, 'left');
-							_getCoordinates();	
-						}
-
+					if(_checkBorders(innerX, xEnd)) {
+						_moveWatermark(innerX, -step, 'left');
+						_getCoordinates();
+					} else {
+						_moveWatermark(xEnd , 0, 'left');
+						_getCoordinates();	
 					}
-				} else if (axis === 'Y') {
-					if (dir === 'UP') {
 
-						if(_checkBorders(innerY, yEnd)) {
-							_moveWatermark(innerY, step, 'top');
-							_getCoordinates();
-						} else {
-							_moveWatermark(0, 0, 'top');
-							_getCoordinates();	
-						}
-
-					} else if (dir === 'DOWN') {
-
-						if(_checkBorders(innerY, yEnd)) {
-							_moveWatermark(innerY, -step, 'top');
-							_getCoordinates();
-						} else {
-							_moveWatermark(yEnd , 0, 'top');
-							_getCoordinates();	
-						}
-
-					}
 				}
+			} else if (axis === 'Y') {
+				if (dir === 'UP') {
 
+					if(_checkBorders(innerY, yEnd)) {
+						_moveWatermark(innerY, step, 'top');
+						_getCoordinates();
+					} else {
+						_moveWatermark(0, 0, 'top');
+						_getCoordinates();	
+					}
+
+				} else if (dir === 'DOWN') {
+
+					if(_checkBorders(innerY, yEnd)) {
+						_moveWatermark(innerY, -step, 'top');
+						_getCoordinates();
+					} else {
+						_moveWatermark(yEnd , 0, 'top');
+						_getCoordinates();	
+					}
+
+				}
 			}
 		} // end _changeCoordinates()
 
