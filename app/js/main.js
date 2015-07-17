@@ -51,7 +51,7 @@ jQuery(window).load(function() {
 
 		function _setUpListeners () {
 			_wmWindow.on('mousemove', _getCoordinates);	//выводить координаты ватермарки при перетаскивании ее мышкой
-			_arrows.on('click', _arrowsClickHandler);	//перемещение ватермарки при нажатии на кнопки X и Y
+			_arrows.on('click', _arrowsClickHandler);	//обработка нажатия по стрелочкам в зависимости от режима
 			_squares.on('click', _positionWM);			//позиционирование ватермарки по опорным точкам фоновой картинки
 			_switchMulti.on('click', _tileWatermark);
 			_switchSingle.on('click', _oneWatermark);
@@ -107,7 +107,7 @@ jQuery(window).load(function() {
 
 						fakeInput.val(data.name);					//вписывает имя файла в инпут
 						fileLoadWindow(data.rootUrl, data.width, data.height, fakeInputID);	//загрузка картинки в свой контейнер
-
+						_getParametrs();							//получает размеры загруженных, отмасштабированых картинок
 				}
 			});
 
@@ -190,7 +190,7 @@ jQuery(window).load(function() {
 
 			if (_switchMode === 'single') {					//режим перемещения ватермарки
 				
-				var arrow 	=$(this), 							//сохраняем стрелку по которой нажали
+				var arrow 	= $(this), 							//сохраняем стрелку по которой нажали
 					axis 	= arrow.attr('data-axis'),			//получение по какой оси работает кнопка
 					dir 	= arrow.attr('data-dir');			//получение направления действия кнопки (увеличить или уменьшить)
 
@@ -209,8 +209,8 @@ jQuery(window).load(function() {
 		function _changeCoordinates (axis, dir) {
 			//e.preventDefault();
 
-			var xEnd 	= _bgWidth - _wmWidth + 1, 			// крайняя позиция X
-				yEnd 	= _bgHeight - _wmHeight + 1, 		// крайняя позиция Y
+			var xEnd 	= _bgWidth - _wmWidth, 			// крайняя позиция X
+				yEnd 	= _bgHeight - _wmHeight, 		// крайняя позиция Y
 				innerX  = _getCoordinates().x,				// текущая X координата ватермарки
 				innerY  = _getCoordinates().y,				// текущая Y координата ватермарки
 
@@ -223,7 +223,8 @@ jQuery(window).load(function() {
 							_moveWatermark(innerX, step, 'left');		//сдвинуть ватермарку, с координаты innerX на величину step по оси X
 							_getCoordinates();							//вывести конечные координаты в поля X, Y
 						} else {
-							_moveWatermark(0, step, 'left');			//если вылазит за границу, то сбросить на начала экрана - сдвигать с координаты 0.
+							_moveWatermark(0, 0, 'left');			//если вылазит за границу, то сбросить на начала экрана - сдвигать с координаты 0.
+							_getCoordinates();	
 						}		
 
 				} else if (dir === 'DOWN') {
@@ -232,7 +233,8 @@ jQuery(window).load(function() {
 							_moveWatermark(innerX, -step, 'left');
 							_getCoordinates();
 						} else {
-							_moveWatermark(xEnd , -step, 'left');
+							_moveWatermark(xEnd , 0, 'left');
+							_getCoordinates();	
 						}
 
 				}
@@ -243,7 +245,8 @@ jQuery(window).load(function() {
 							_moveWatermark(innerY, step, 'top');
 							_getCoordinates();
 						} else {
-							_moveWatermark(0, step, 'top');
+							_moveWatermark(0, 0, 'top');
+							_getCoordinates();	
 						}
 
 				} else if (dir === 'DOWN') {
@@ -252,12 +255,14 @@ jQuery(window).load(function() {
 							_moveWatermark(innerY, -step, 'top');
 							_getCoordinates();
 						} else {
-							_moveWatermark(yEnd , -step, 'top');
+							_moveWatermark(yEnd , 0, 'top');
+							_getCoordinates();	
 						}
 
 				}
-			}			
+			}		
 		} // end _changeCoordinates()
+
 
 		/*Получение и вывод координат ватермарки в окошки X и Y*/
 		/* Например, чтобы получить x=_getCoordinates().x */
@@ -282,11 +287,18 @@ jQuery(window).load(function() {
 		 * @return {bool}   true	если текущая координата в пределах границы
 		 */
 		function _checkBorders (value, end) {
-			if ((value > 0 ) && (value < end)) {
+			if ((value >= 0 ) && (value <= end)) {
 				return true;
 			} else {
 				return false;
 			}
+		}
+
+		function _getParametrs() {
+			_bgWidth    = _bgWindow.width();
+			_bgHeight   = _bgWindow.height();
+			_wmWidth	= _wmWindow.width();
+			_wmHeight	= _wmWindow.height();
 		}
 
 		/**
@@ -301,11 +313,9 @@ jQuery(window).load(function() {
 		}
 
 		function _tileWatermark () {
-			var widthWM  = _wmWindow.width(),
-				heightWM = _wmWindow.height(),
-				widthWMTile = MAX_WIDTH_TILE_WM - (MAX_WIDTH_TILE_WM % widthWM), // обрезаем лишнюю ширину у контейнера
-				heightWMTlie = MAX_HEIGHT_TILE_WM - (MAX_HEIGHT_TILE_WM % heightWM), // обрезаем лишнюю высоту у контейнера
-				countWM = Math.round((widthWMTile*heightWMTlie) / (widthWM*heightWM)), // считаем кол-во ватермарков, необходимое для заполнения контейнера
+			var widthWMTile = MAX_WIDTH_TILE_WM - (MAX_WIDTH_TILE_WM % _wmWidth), // обрезаем лишнюю ширину у контейнера
+				heightWMTlie = MAX_HEIGHT_TILE_WM - (MAX_HEIGHT_TILE_WM % _wmHeight), // обрезаем лишнюю высоту у контейнера
+				countWM = Math.round((widthWMTile*heightWMTlie) / (_wmWidth*_wmHeight)), // считаем кол-во ватермарков, необходимое для заполнения контейнера
 				htmlWM = '',
 				i = 0;
 
@@ -313,14 +323,14 @@ jQuery(window).load(function() {
 
 			// сохраняем текущую позицию и размер WM для режима Single
 			_currentDataWM = {
-				'width': widthWM,
-				'height': heightWM,
+				'width': _wmWidth,
+				'height': _wmHeight,
 				'top': _wmWindow.css('top'),
 				'left': _wmWindow.css('left')
 			};
 
 			_wmWindow
-				.find('img').css({'width': widthWM, 'height': heightWM})
+				.find('img').css({'width': _wmWidth, 'height': _wmHeight})
 				.end()
 				.removeClass('window__wm_one')
 				.addClass('window__wm_tile')
@@ -371,8 +381,8 @@ jQuery(window).load(function() {
 		}
 
 		function _switchMultiSettings () {
-			_settingsMode = 'multi';
-			_switchValue.val(_settingsMode);	
+			_switchMode = 'multi';
+			_switchValue.val(_switchMode);	
 			_squares.removeClass('square-td--active');
 			_positionBlock.addClass('wm-multi');
 			_xLabel.removeClass('x-singl');
@@ -380,12 +390,13 @@ jQuery(window).load(function() {
 		}
 
 		function _switchSingleSettings () {
-			_settingsMode = 'single';
-			_switchValue.val(_settingsMode);	
+			_switchMode = 'single';
+			_switchValue.val(_switchMode);	
 			_squares.eq(0).addClass('square-td--active');
 			_positionBlock.removeClass('wm-multi');
 			_xLabel.addClass('x-singl');
 			_yLabel.addClass('y-singl');	
+			_getCoordinates ();						//показать в полях X Y текущие координаты
 		}
 
 		function _resetApp () {
@@ -405,6 +416,7 @@ jQuery(window).load(function() {
 			.fail(function() {
 				console.log("ошибка очистки папки");
 			});
+		}
 
 		function _submitApp () {
 			var url = './php/test.php';
@@ -423,10 +435,7 @@ jQuery(window).load(function() {
 			})
 			.always(function() {
 				console.log("complete");
-			});
-			
-		}
-			
+			});	
 		}
 
 		return {
