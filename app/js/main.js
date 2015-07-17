@@ -47,7 +47,11 @@ jQuery(window).load(function() {
 
 			_buttonsBlock 	= _settingsForm.find('.settings__buttons'),
 				_submitBtn	= _buttonsBlock.find('.btn-submit'),
-				_resetBtn	= _buttonsBlock.find('.btn-reset');
+				_resetBtn	= _buttonsBlock.find('.btn-reset'),
+
+			_verticLine = $('.line-vertical'),            // вертик. линия для отображения отступа слева
+			_horizLine = $('.line-horizontal'),           // горизонт. линия для отображения отступа сверху
+			_lineParent = $('.position__square-wrap');    // обертка для миниатюры;
 
 		function _setUpListeners () {
 			_wmWindow.on('mousemove', _getCoordinates);	//выводить координаты ватермарки при перетаскивании ее мышкой
@@ -216,8 +220,11 @@ jQuery(window).load(function() {
 
 				step 	= 5;								// шаг сдвига ватермарки, в пикселях
 
-			if (axis === 'X') {
-				if (dir === 'UP') {
+			if (/*_switchValue.val('multi')*/_positionBlock.hasClass('wm-multi')){                  // действия при включении режима "замостить"
+				_wmMarginChange(axis, dir)
+			} else {
+				if (axis === 'X') {
+					if (dir === 'UP') {
 
 						if(_checkBorders(innerX, xEnd)) { 				//проверка границ, текущей координаты innerX в пределах xEnd
 							_moveWatermark(innerX, step, 'left');		//сдвинуть ватермарку, с координаты innerX на величину step по оси X
@@ -227,7 +234,7 @@ jQuery(window).load(function() {
 							_getCoordinates();	
 						}		
 
-				} else if (dir === 'DOWN') {
+					} else if (dir === 'DOWN') {
 
 						if(_checkBorders(innerX, xEnd)) {
 							_moveWatermark(innerX, -step, 'left');
@@ -237,9 +244,9 @@ jQuery(window).load(function() {
 							_getCoordinates();	
 						}
 
-				}
-			} else if (axis === 'Y') {
-				if (dir === 'UP') {
+					}
+				} else if (axis === 'Y') {
+					if (dir === 'UP') {
 
 						if(_checkBorders(innerY, yEnd)) {
 							_moveWatermark(innerY, step, 'top');
@@ -249,7 +256,7 @@ jQuery(window).load(function() {
 							_getCoordinates();	
 						}
 
-				} else if (dir === 'DOWN') {
+					} else if (dir === 'DOWN') {
 
 						if(_checkBorders(innerY, yEnd)) {
 							_moveWatermark(innerY, -step, 'top');
@@ -259,9 +266,84 @@ jQuery(window).load(function() {
 							_getCoordinates();	
 						}
 
+					}
 				}
-			}		
+
+			}
 		} // end _changeCoordinates()
+
+		function _wmMarginChange(axis, dir){
+			var	_verticLineWidth = _verticLine.width(),   // ширина вртик. линии
+				_horizLineHeight = _horizLine.height(),   // высота горизонт. линии
+				_parentWidth = _lineParent.width(),       // ширина обертки миниатюры
+				_parentHeight = _lineParent.height(),     // высота обертки миниатюры
+				_stepChange = 1,                          // шаг для изменения ширины и высоты линий
+				_newLineWidth,                            // измененная ширина вертик. линии
+				_newLineHeight,                           // измененная высота горизонт. линии
+				_innerLeft,                               // центрирование вертик. линии после изменения ширины
+				_innerTop;                                // центрирование горизонт. линии после изменения высоты
+
+			if (axis === 'X') {
+				if (dir === 'UP') {
+					// изменнение высоты гориз. линии на 1px
+					_newLineHeight = _horizLineHeight + _stepChange;
+					// центрирование гориз. линии относительно родителя
+					_innerTop = (_parentHeight - _newLineHeight)/2;
+
+					if(_newLineHeight < _parentHeight){
+						_horizLine.css({
+							height : _newLineHeight,
+							top : _innerTop
+						});
+					}
+				} else if (dir === 'DOWN') {
+					_newLineHeight = _horizLineHeight - _stepChange;
+					_innerTop = (_parentHeight - _newLineHeight)/2;
+
+					if(_newLineHeight < -1){
+						_horizLine.css({
+							height : 0,
+							top : "50%"
+						});
+					} else{
+						_horizLine.css({
+							height : _newLineHeight,
+							top : _innerTop
+						});
+					}
+				}
+				_getMargin();
+			} else {
+				if (axis === 'Y') {
+					if (dir === 'UP') {
+						_newLineWidth = _verticLineWidth + _stepChange;
+						_innerLeft = (_parentWidth - _newLineWidth)/2;
+						if(_newLineWidth < _parentWidth) {
+							_verticLine.css({
+								width: _newLineWidth,
+								left: _innerLeft
+							});
+						}
+					} else if (dir === 'DOWN') {
+						_newLineWidth = _verticLineWidth - _stepChange;
+						_innerLeft = (_parentWidth - _newLineWidth)/2;
+
+						if(_newLineWidth < -1){
+							_verticLine.css({
+								width : 0,
+								left : "50%"
+							});
+						} else {
+							_verticLine.css({
+								width : _newLineWidth,
+								left : _innerLeft
+							});
+						}
+					}
+					_getMargin();
+				}
+			}
+		}
 
 
 		/*Получение и вывод координат ватермарки в окошки X и Y*/
@@ -271,14 +353,24 @@ jQuery(window).load(function() {
 			var posX = _wmWindow.offset().left - _bgWindow.offset().left, 
 				posY = _wmWindow.offset().top - _bgWindow.offset().top;
 
-			_xInput.val(parseInt(posX)); //вывод координаты в поле X
-			_yInput.val(parseInt(posY));
+				_xInput.val(parseInt(posX)); //вывод координаты в поле X
+				_yInput.val(parseInt(posY));
 
-			return {
-				x : posX,
-				y : posY
-			};
+				return {
+					x: posX,
+					y: posY
+				};
 		} //end _getCoordinates()
+
+		function _getMargin() {
+			//var horizLineHeight = _horizLine.height(),     // высота горизонт. линии
+			//	verticLineWidth = _verticLine.width();     // ширина вертик. линии
+			//
+			//if (_switchValue.val('multi')) {
+			//	_xInput.val(parseInt(horizLineHeight));    // вывод высоты горизонтальной линии
+			//	_yInput.val(parseInt(verticLineWidth));    // вывод ширины вертикальной линии
+			//}
+		}
 
 		/**
 		 * Проверка выходит ли ватермарка за границы фонового изображения
