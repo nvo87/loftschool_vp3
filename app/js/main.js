@@ -22,10 +22,13 @@ jQuery(window).load(function() {
 			_wmWidth	= _wmWindow.width(),
 			_wmHeight	= _wmWindow.height(),
 
-			_settingsForm 	= $('.wm-generator__settings'),						//блок с настройками
+			_settingsForm 	= $('.wm-generator__settings'),		//блок с настройками
+			_disableLayer	= $('.disable'),					//слой, делающий настройки неактивными
 
 			_uploadsBlock 	= _settingsForm.find('.settings__upload'),			//блок загрузки файлов
 				_fileInput	= _uploadsBlock.find('.file-load__input-file'),		//получение файл-инпутов на форме
+				_bgFileInput	= _uploadsBlock.find('#bg-file'),		//получение файл-инпутов на форме
+				_wmFileInput	= _uploadsBlock.find('#wm-file'),		//получение файл-инпутов на форме
 
 			_positionBlock 	= _settingsForm.find('.settings__position'),		//блок позиционирования ватермарки
 				_xInput		= _positionBlock.find('#x-axis'),					//поля для вывода координат ватермарки
@@ -60,6 +63,19 @@ jQuery(window).load(function() {
 			_switchMulti.on('click', _tileWatermark);
 			_switchSingle.on('click', _oneWatermark);
 			_resetBtn.on('click', _resetApp);
+			_bgFileInput.on('change', _checkDisabled);
+			_wmFileInput.on('change', _checkDisabled);
+
+		}
+
+		function _checkDisabled () {
+			if (!_bgFileInput.val()) {
+				_disableLayer.removeClass('disable-else').show();
+			} else if (!_wmFileInput.val()) {
+				_disableLayer.addClass('disable-else');
+			} else {
+				_disableLayer.hide(); 
+			}
 		}
 
 		/*инициализация свойства draggable (перетаскивание мышкой)*/
@@ -488,6 +504,9 @@ jQuery(window).load(function() {
 		function _resetApp () {
 			_bgImg.remove();
 			_wmImg.remove();
+			_bgFileInput.val('');
+			_wmFileInput.val('');
+			_checkDisabled();
 
 			var url = './php/reset.php';
 			$.ajax({
@@ -530,6 +549,7 @@ jQuery(window).load(function() {
 				_fileUpload ();
 				_draggableInit ();
 				_opacitySliderInit ();
+				_checkDisabled();
 			}
 		};
 

@@ -121,6 +121,19 @@ main-window
 /*
 settings
 */
+.disable{
+	position: absolute;
+    height: 510px;
+    width: 100%;
+    background-color: #f1f1f5;
+    opacity: 0.5;
+    left: 0;
+    z-index: 99999;
+}
+.disable-else{
+	top: 155px;
+	height: 429px;
+}
 .wm-generator__settings{
 	width: 260px;
 	display: table-cell;
