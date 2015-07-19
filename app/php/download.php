@@ -9,41 +9,49 @@ $ctype="image/jpg";
 $quality=95;
 
 
-$switch_mode = $_POST['switch_mode'];					//режим работы - одиночная или замостить. Приходит - single или multi
-$bg_image = $path.$_POST['bg-img-path'];				//получение картинки
-$wm_image = $path.$_POST['wm-img-path'];
-$wm_opacity=$_POST['transparency']*100; //в процентах
-$wm_positionX = $_POST['x-axis'];
-$wm_positionY = $_POST['y-axis'];
-$wm_position="LT";
-
-//создание слоя
-$bg_layer = ImageWorkshop::initFromPath($bg_image);		
-$wm_layer = ImageWorkshop::initFromPath($wm_image);
+//$switch_mode = $_POST['switch_mode'];					//режим работы - одиночная или замостить. Приходит - single или multi
+$bg_image = $path.$_POST['bgImgPath'];				//получение картинки
+$wm_image = $path.$_POST['wmImgPath'];
 
 //Пересчет позиции ватермарки с учетом реального размера картинки
 $bg_size = getimagesize($bg_image);
 $bg_width = $bg_size[0];
 $bg_height = $bg_size[1];
 
-$k_x = $bg_width / 650; // Считаем коэффициент сдвига .650 - ширина окна. Вывести сюда данные через js
-$k_y = $bg_height / 535; // Считаем коэффициент сдвига .535 - высота окна. Вывести сюда данные через js
-$wm_positionX_real = $k_x * $wm_positionX;
-$wm_positionY_real = $k_y * $wm_positionY;
+$wm_opacity=$_POST['opacity']*100; //в процентах
+$coordinates_array = $_POST['coordinates'];
+//$wm_positionX = $_POST['x-axis'];
+//$wm_positionY = $_POST['y-axis'];
+$wm_position="LT";
+//создание слоя
+$bg_layer = ImageWorkshop::initFromPath($bg_image);		
+$wm_layer = ImageWorkshop::initFromPath($wm_image);
 
-// Прозрачность для водяного знака
-$wm_layer->opacity($wm_opacity);
+$length = count($coordinates_array);
+for ($i=0; $i < $length; $i++) { 
+	$wm_positionX=$coordinates_array[i][0];
+	$wm_positionY=$coordinates_array[i][1];
 
-/**
- * Наложение слоя $wm_layer поверх слоя $bg_layer
- * @param ImageWorkshop $layer - накладываемый слой
- * @param integer $positionX   - координата по оси X
- * @param integer $positionY   - координата по оси Y
- * @param string $position     - начальная тока отсчета координат (LT, MT, RT, LM, MM и т.д.)
- * $mainLayer->addLayerOnTop($layer, $positionX, $positionY, $position);
- */
 
-$bg_layer->addLayerOnTop($wm_layer, $wm_positionX_real, $wm_positionY_real, $wm_position);
+	$k_x = $bg_width / 650; // Считаем коэффициент сдвига .650 - ширина окна. Вывести сюда данные через js
+	$k_y = $bg_height / 535; // Считаем коэффициент сдвига .535 - высота окна. Вывести сюда данные через js
+	$wm_positionX_real = $k_x * $wm_positionX;
+	$wm_positionY_real = $k_y * $wm_positionY;
+
+	// Прозрачность для водяного знака
+	$wm_layer->opacity($wm_opacity);
+
+	/**
+	 * Наложение слоя $wm_layer поверх слоя $bg_layer
+	 * @param ImageWorkshop $layer - накладываемый слой
+	 * @param integer $positionX   - координата по оси X
+	 * @param integer $positionY   - координата по оси Y
+	 * @param string $position     - начальная тока отсчета координат (LT, MT, RT, LM, MM и т.д.)
+	 * $mainLayer->addLayerOnTop($layer, $positionX, $positionY, $position);
+	 */
+
+	$bg_layer->addLayerOnTop($wm_layer, $wm_positionX_real, $wm_positionY_real, $wm_position);
+}
 
 /**
  * Сохраняет изображение по указанному пути

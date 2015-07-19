@@ -27,8 +27,10 @@ jQuery(window).load(function() {
 
 			_uploadsBlock 	= _settingsForm.find('.settings__upload'),			//блок загрузки файлов
 				_fileInput	= _uploadsBlock.find('.file-load__input-file'),		//получение файл-инпутов на форме
-				_bgFileInput	= _uploadsBlock.find('#bg-file'),		//получение файл-инпутов на форме
-				_wmFileInput	= _uploadsBlock.find('#wm-file'),		//получение файл-инпутов на форме
+				_bgFileInput	= _uploadsBlock.find('#bg-file'),				//получение файл-инпутов на форме
+				_wmFileInput	= _uploadsBlock.find('#wm-file'),				//получение файл-инпутов на форме
+				_bgFilePath		= _uploadsBlock.find('#bg-img-path'),
+				_wmFilePath		= _uploadsBlock.find('#wm-img-path'),
 
 			_positionBlock 	= _settingsForm.find('.settings__position'),		//блок позиционирования ватермарки
 				_xInput		= _positionBlock.find('#x-axis'),					//поля для вывода координат ватермарки
@@ -57,12 +59,13 @@ jQuery(window).load(function() {
 			_lineParent = $('.position__square-wrap');    // обертка для миниатюры;
 
 		function _setUpListeners () {
-			_wmWindow.on('mousemove', _getCoordinates);	//выводить координаты ватермарки при перетаскивании ее мышкой
+			_wmWindow.on('mousemove', _dragWM);			//выводить координаты ватермарки при перетаскивании ее мышкой
 			_arrows.on('click', _arrowsClickHandler);	//обработка нажатия по стрелочкам в зависимости от режима
 			_squares.on('click', _positionWM);			//позиционирование ватермарки по опорным точкам фоновой картинки
 			_switchMulti.on('click', _tileWatermark);
 			_switchSingle.on('click', _oneWatermark);
 			_resetBtn.on('click', _resetApp);
+			_submitBtn.on('click', _submitApp);
 			_bgFileInput.on('change', _checkDisabled);
 			_wmFileInput.on('change', _checkDisabled);
 
@@ -90,6 +93,12 @@ jQuery(window).load(function() {
 			_wmWindow.draggable({
 				containment: contVal
 			});
+		}
+
+		//функция-прослойка для вызова _getCoordinates(element) и передачи в нее _wmWindow в качестве аргумента.
+		//Напрямую из прослушки событий _wmWindow передать нельзя
+		function _dragWM () {
+			_getCoordinates(_wmWindow);
 		}
 
 		/*инициализация слайдера для изменения прозрачности*/
@@ -200,7 +209,7 @@ jQuery(window).load(function() {
 				of: _bgWindow
 			});
 
-			_getCoordinates();
+			_getCoordinates(_wmWindow);
 			_squares.removeClass('square-td--active');
 			$this.addClass('square-td--active');
 		} //end _positionWM()
@@ -230,8 +239,8 @@ jQuery(window).load(function() {
 
 			var xEnd 	= _bgWidth - _wmWidth, 			// крайняя позиция X
 				yEnd 	= _bgHeight - _wmHeight, 		// крайняя позиция Y
-				innerX  = _getCoordinates().x,				// текущая X координата ватермарки
-				innerY  = _getCoordinates().y,				// текущая Y координата ватермарки
+				innerX  = _getCoordinates(_wmWindow).x,				// текущая X координата ватермарки
+				innerY  = _getCoordinates(_wmWindow).y,				// текущая Y координата ватермарки
 
 				step 	= 5;								// шаг сдвига ватермарки, в пикселях
 
@@ -240,20 +249,20 @@ jQuery(window).load(function() {
 
 					if(_checkBorders(innerX, xEnd)) { 				//проверка границ, текущей координаты innerX в пределах xEnd
 						_moveWatermark(innerX, step, 'left');		//сдвинуть ватермарку, с координаты innerX на величину step по оси X
-						_getCoordinates();							//вывести конечные координаты в поля X, Y
+						_getCoordinates(_wmWindow);							//вывести конечные координаты в поля X, Y
 					} else {
 						_moveWatermark(0, 0, 'left');			//если вылазит за границу, то сбросить на начала экрана - сдвигать с координаты 0.
-						_getCoordinates();	
+						_getCoordinates(_wmWindow);	
 					}		
 
 				} else if (dir === 'DOWN') {
 
 					if(_checkBorders(innerX, xEnd)) {
 						_moveWatermark(innerX, -step, 'left');
-						_getCoordinates();
+						_getCoordinates(_wmWindow);
 					} else {
 						_moveWatermark(xEnd , 0, 'left');
-						_getCoordinates();	
+						_getCoordinates(_wmWindow);	
 					}
 
 				}
@@ -262,20 +271,20 @@ jQuery(window).load(function() {
 
 					if(_checkBorders(innerY, yEnd)) {
 						_moveWatermark(innerY, step, 'top');
-						_getCoordinates();
+						_getCoordinates(_wmWindow);
 					} else {
 						_moveWatermark(0, 0, 'top');
-						_getCoordinates();	
+						_getCoordinates(_wmWindow);	
 					}
 
 				} else if (dir === 'DOWN') {
 
 					if(_checkBorders(innerY, yEnd)) {
 						_moveWatermark(innerY, -step, 'top');
-						_getCoordinates();
+						_getCoordinates(_wmWindow);
 					} else {
 						_moveWatermark(yEnd , 0, 'top');
-						_getCoordinates();	
+						_getCoordinates(_wmWindow);	
 					}
 
 				}
@@ -357,11 +366,11 @@ jQuery(window).load(function() {
 
 
 		/*Получение и вывод координат ватермарки в окошки X и Y*/
-		/* Например, чтобы получить x=_getCoordinates().x */
-		function _getCoordinates () {
+		/* Например, чтобы получить x=_getCoordinates(element).x */
+		function _getCoordinates (element) {
 			//вычисление координат относительно начала фоновой картинки
-			var posX = _wmWindow.offset().left - _bgWindow.offset().left, 
-				posY = _wmWindow.offset().top - _bgWindow.offset().top;
+			var posX = element.offset().left - _bgWindow.offset().left, 
+				posY = element.offset().top - _bgWindow.offset().top;
 
 				_xInput.val(parseInt(posX)); //вывод координаты в поле X
 				_yInput.val(parseInt(posY));
@@ -498,7 +507,7 @@ jQuery(window).load(function() {
 			_positionBlock.removeClass('wm-multi');
 			_xLabel.addClass('x-singl');
 			_yLabel.addClass('y-singl');	
-			_getCoordinates ();						//показать в полях X Y текущие координаты
+			_getCoordinates (_wmWindow);						//показать в полях X Y текущие координаты
 		}
 
 		function _resetApp () {
@@ -523,24 +532,48 @@ jQuery(window).load(function() {
 			});
 		}
 
-		function _submitApp () {
-			var url = './php/test.php';
+		function _submitApp (e) {
+			e.preventDefault();
+			//var url = './php/test.php',
+			var url = './php/test.php',
+				submitData = {},
+				wmArray = $('.wm-img'),
+				coordinatesArray = [],
+				innerX = 0,
+				innerY = 0;
+
+
+			wmArray.each(function(index, el) {
+				innerX = _getCoordinates($(el)).x;
+				innerY = _getCoordinates($(el)).y;
+ 
+				coordinatesArray[index]=[innerX, innerY];
+			});
+
+			var ser=coordinatesArray.serialize();
+
+			console.log(ser);
+
+			_getParametrs();
+			submitData = {
+				bgImgPath : _bgFilePath.val(),
+				wmImgPath : _wmFilePath.val(),
+				coordinates : coordinatesArray,
+				opacity : _opacityValue.val()
+			};
+
 
 			$.ajax({
 				url: url,
 				type: 'POST',
-				dataType: '',
-				data: {val: 'value1'},
+				data: submitData,
 			})
-			.done(function() {
-				console.log("success");
+			.done(function(answer) {
+				console.log(answer);
 			})
 			.fail(function() {
 				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
-			});	
+			});
 		}
 
 		return {
