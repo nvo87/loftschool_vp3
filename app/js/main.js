@@ -23,6 +23,7 @@ jQuery(window).load(function() {
 			_wmHeight	= _wmWindow.height(),
 
 			_settingsForm 	= $('.wm-generator__settings'),		//блок с настройками
+			_form = _settingsForm.find('#form'),
 			_disableLayer	= $('.disable'),					//слой, делающий настройки неактивными
 
 			_uploadsBlock 	= _settingsForm.find('.settings__upload'),			//блок загрузки файлов
@@ -42,7 +43,8 @@ jQuery(window).load(function() {
 				_switchSingle = $('.switch__single'), 							//выключение режима "замостить"
 				_switchMulti  = $('.switch__multi'), 							//включение режима "замостить"
 				_switchValue  = $('.switch__input--hidden'), 					//скрытый инпут, для передачи режима в php
-				_switchMode	= 'single',											//режим в котором работаем, single - перемещение ватермарки, multi - клонириование
+				_switchMode	  = 'single',											//режим в котором работаем, single - перемещение ватермарки, multi - клонириование
+				_coordinatesValue = _positionBlock.find('#wm-coords'),							//скрытый инпут с координатами ватермарок
 
 				_currentDataWM = {}, // хранилище текущих данных позиции и размера вотермарка для переключения режима отображения
 
@@ -99,6 +101,7 @@ jQuery(window).load(function() {
 		//Напрямую из прослушки событий _wmWindow передать нельзя
 		function _dragWM () {
 			_getCoordinates(_wmWindow);
+			//_getCoordinatesArray();
 		}
 
 		/*инициализация слайдера для изменения прозрачности*/
@@ -227,6 +230,8 @@ jQuery(window).load(function() {
 			} else if (_switchMode === 'multi') {			//режим клонирования ватермарки
 				_wmMarginChange(axis, dir);
 			}
+
+			//_getCoordinatesArray();
 		}
 
 		/**
@@ -460,7 +465,28 @@ jQuery(window).load(function() {
 			_wmWindow.append(htmlWM);
 			_draggableInit('free'); // инициируем перетаскивание без ограничений
 			_switchMultiSettings();
+			//_getCoordinatesArray();
+		}
 
+		//получение массива с координатами ватермарок и запись их в скрытый инпут
+		function _getCoordinatesArray () {
+			var 
+				wmArray = $('.wm-img'),
+				coordinatesArray = [],
+				innerX = 0,
+				innerY = 0;
+
+			wmArray.each(function(index, el) {
+				innerX = _getCoordinates($(el)).x;
+				innerY = _getCoordinates($(el)).y;
+			
+				coordinatesArray[index]=[innerX, innerY];
+			});
+
+			console.log(coordinatesArray);
+			console.log(_coordinatesValue);
+
+			_coordinatesValue.val(coordinatesArray);
 		}
 
 		function _oneWatermark () {
@@ -534,46 +560,12 @@ jQuery(window).load(function() {
 
 		function _submitApp (e) {
 			e.preventDefault();
-			//var url = './php/test.php',
-			var url = './php/test.php',
-				submitData = {},
-				wmArray = $('.wm-img'),
-				coordinatesArray = [],
-				innerX = 0,
-				innerY = 0;
 
-
-			wmArray.each(function(index, el) {
-				innerX = _getCoordinates($(el)).x;
-				innerY = _getCoordinates($(el)).y;
- 
-				coordinatesArray[index]=[innerX, innerY];
-			});
-
-			var ser=coordinatesArray.serialize();
-
-			console.log(ser);
-
-			_getParametrs();
-			submitData = {
-				bgImgPath : _bgFilePath.val(),
-				wmImgPath : _wmFilePath.val(),
-				coordinates : coordinatesArray,
-				opacity : _opacityValue.val()
-			};
-
-
-			$.ajax({
-				url: url,
-				type: 'POST',
-				data: submitData,
-			})
-			.done(function(answer) {
-				console.log(answer);
-			})
-			.fail(function() {
-				console.log("error");
-			});
+			$.when(_getCoordinatesArray())
+				.then(function () {
+					_form.trigger('submit');
+				});
+		
 		}
 
 		return {
