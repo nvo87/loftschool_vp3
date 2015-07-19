@@ -356,6 +356,7 @@ jQuery(window).load(function() {
 		function _getCoordinates (e, pX, pY) {
 			//вычисление координат относительно начала фоновой картинки
 			var posX, posY;
+			// pX, pY - отступы в режиме Multi, если их нет - берем координаты позиции Вотермарка
 			if (typeof pX !== 'undefined') {
 				posX = parseInt(pX);
 			} else {
@@ -373,7 +374,7 @@ jQuery(window).load(function() {
 					if (e.type === 'mousemove' && _switchMode === 'multi') return;
 				}
 
-				console.log(posX, posY);
+				//console.log(pX, pY);
 
 				_xInput.val(parseInt(posX)); //вывод координаты в поле X
 				_yInput.val(parseInt(posY));
@@ -385,13 +386,13 @@ jQuery(window).load(function() {
 		} //end _getCoordinates()
 
 		function _getMargin() {
-			//var horizLineHeight = _horizLine.height(),     // высота горизонт. линии
-			//	verticLineWidth = _verticLine.width();     // ширина вертик. линии
-			//
-			//if (_switchValue.val('multi')) {
-			//	_xInput.val(parseInt(horizLineHeight));    // вывод высоты горизонтальной линии
-			//	_yInput.val(parseInt(verticLineWidth));    // вывод ширины вертикальной линии
-			//}
+			var horizLineHeight = _horizLine.height(),     // высота горизонт. линии
+				verticLineWidth = _verticLine.width();     // ширина вертик. линии
+
+			if (_switchValue.val('multi')) {
+				_yInput.val(parseInt(horizLineHeight));    // вывод высоты горизонтальной линии
+				_xInput.val(parseInt(verticLineWidth));    // вывод ширины вертикальной линии
+			}
 		}
 
 		/**
@@ -433,9 +434,7 @@ jQuery(window).load(function() {
 				htmlWM = '',
 				i = 0,
 				marginRightWM = 0 || parseInt($('.window__wm img:eq(0)').css('margin-right')),
-				marginBottomWM = 0 || parseInt($('.window__wm img:eq(0)').css('margin-right'));
-
-				//console.log(_getCoordinates().x);
+				marginBottomWM = 0 || parseInt($('.window__wm img:eq(0)').css('margin-bottom'));
 
 				_getCoordinates('click', marginRightWM, marginBottomWM);
 			if (_wmWindow.hasClass('window__wm_tile')) return;
