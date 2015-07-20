@@ -6,7 +6,7 @@
 	$result_name='result.jpg';
 	$result_file=$path.$result_name;
 	$ctype="image/jpg";
-	$quality=95;
+	$quality=85;
 
 	$bg_image = $path.$_POST['bg-img-path'];		//получение картинки
 	$wm_image = $path.$_POST['wm-img-path'];
@@ -16,8 +16,18 @@
 	$bg_width = $bg_size[0];					//истинные размеры фона
 	$bg_height = $bg_size[1];
 
-	$bg_width_scale = $_POST['bg-width'];
+	//echo 'размеры фоновой: '.$bg_width.'x'.$bg_height.'<br><br>';
+
+	$bg_width_scale = $_POST['bg-width'];		//отмасштабированные размеры
 	$bg_height_scale = $_POST['bg-height'];
+
+	$k_x = $bg_width / $bg_width_scale; // Считаем коэффициент сдвига
+	$k_y = $bg_height / $bg_height_scale; // Считаем коэффициент сдвига
+
+	//Получение реального размера ватермарки
+	$wm_size = getimagesize($wm_image);
+	$wm_width = $wm_size[0];					//истинные размеры фона
+	$wm_height = $wm_size[1];	
 
 	// Получение координат ватермарки
 	$coordinates_array = $_POST['coordinates'];
@@ -32,38 +42,48 @@
 	$wm_opacity=$_POST['transparency']*100; //в процентах
 	$wm_layer->opacity($wm_opacity);
 
-	//Цикл наложения всех ватермарок на фон
+	$k=0; //количество ватермарок попавших на фон
+
+	//Цикл перебора всех ватермарок для наложения на фон
 	$length = count($coordinates_array);
-	for ($i=0; $i < $length; $i=$i+2) { 
+	for ($i=0; $i < $length; $i=$i+2) {
 		$wm_positionX=$coordinates_array[$i];
 		$wm_positionY=$coordinates_array[$i+1];
 
-		$k_x = $bg_width / $bg_width_scale; // Считаем коэффициент сдвига .650 - ширина окна. Вывести сюда данные через js
-		$k_y = $bg_height / $bg_height_scale; // Считаем коэффициент сдвига .535 - высота окна. Вывести сюда данные через js
 		$wm_positionX_real = $k_x * $wm_positionX;
 		$wm_positionY_real = $k_y * $wm_positionY;
 
+		//отбор ватермарок, координаты которых лежат рядом с границами фонового изображения
+		//так же отбор по количеству попавших ватермарок, из-за нагрузки на сервер
+		if ( $k<1000 && ($wm_positionX_real>-$wm_width && $wm_positionY_real>-$wm_height) && ($wm_positionX_real<$bg_width && $wm_positionY_real<$bg_height)) {
 
-		/**
-		 * Наложение слоя $wm_layer поверх слоя $bg_layer
-		 * @param ImageWorkshop $layer - накладываемый слой
-		 * @param integer $positionX   - координата по оси X
-		 * @param integer $positionY   - координата по оси Y
-		 * @param string $position     - начальная тока отсчета координат (LT, MT, RT, LM, MM и т.д.)
-		 * $mainLayer->addLayerOnTop($layer, $positionX, $positionY, $position);
-		 */
-		$bg_layer->addLayerOnTop($wm_layer, $wm_positionX_real, $wm_positionY_real, $wm_position);
+
+			//echo 'отобраные координаты ватермарок: <br>'.$wm_positionX_real.'xx'.$wm_positionY_real.'<br>';
+
+			/**
+			 * Наложение слоя $wm_layer поверх слоя $bg_layer
+			 * @param ImageWorkshop $layer - накладываемый слой
+			 * @param integer $positionX   - координата по оси X
+			 * @param integer $positionY   - координата по оси Y
+			 * @param string $position     - начальная тока отсчета координат (LT, MT, RT, LM, MM и т.д.)
+			 * $mainLayer->addLayerOnTop($layer, $positionX, $positionY, $position);
+			 */
+			$bg_layer->addLayerOnTop($wm_layer, $wm_positionX_real, $wm_positionY_real, $wm_position);
+
+			$k++;
+		} 
 	}
 
+	//echo 'количество ватермарок: '.$k.'<br>';
 	// Сохранение готового изображения (если требуется)
 	$bg_layer->save($path, $result_name, true, null, $quality);
 
 	// Если требуется показать созданное изображение в браузере
-	/*$image = $bg_layer->getResult();
+	$image = $bg_layer->getResult();
 	header('Content-type: image/jpeg');
 	header('Content-Disposition: filename="result.jpg"');
 	imagejpeg($image, null, $quality);
-	exit;*/
+	exit;
 
 	//отдаем файл на скачивание
 	header('Content-Description: File Transfer');
@@ -77,3 +97,5 @@
 	readfile($result_file);
 	exit;
  ?>
+
+<!-- <img src="<?php echo $result_file ?>" alt=""> -->

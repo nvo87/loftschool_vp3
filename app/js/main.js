@@ -197,7 +197,7 @@ jQuery(window).load(function() {
 				of: _bgWindow
 			});
 
-			_getCoordinates(_wmWindow);
+			_getCoordinates();
 
 			_squares.removeClass('square-td--active');
 			$this.addClass('square-td--active');
@@ -369,8 +369,7 @@ jQuery(window).load(function() {
 					_innerTop = (_parentHeight - _newLineHeight)/2;
 
 					_wmImgs.css({'margin-bottom': _newLineHeight});
-					//_getCoordinates(_wmWindow, 'click', _newLineWidth, _newLineHeight);
-
+					
 					if(_newLineHeight < _parentHeight){
 						_horizLine.css({
 							height : _newLineHeight,
@@ -382,8 +381,7 @@ jQuery(window).load(function() {
 					_innerTop = (_parentHeight - _newLineHeight)/2;
 
 					_wmImgs.css({'margin-bottom': _newLineHeight});
-					//_getCoordinates(_wmWindow, 'click', _newLineWidth, _newLineHeight);
-
+					
 					if(_newLineHeight < -1){
 						_horizLine.css({
 							height : 0,
@@ -403,8 +401,7 @@ jQuery(window).load(function() {
 						_innerLeft = (_parentWidth - _newLineWidth)/2;
 
 						_wmImgs.css({'margin-right': _newLineWidth});
-						//_getCoordinates(_wmWindow, 'click', _newLineWidth, _newLineHeight);
-
+						
 						if(_newLineWidth < _parentWidth) {
 							_verticLine.css({
 								width: _newLineWidth,
@@ -416,8 +413,7 @@ jQuery(window).load(function() {
 						_innerLeft = (_parentWidth - _newLineWidth)/2;
 
 						_wmImgs.css({'margin-right': _newLineWidth});
-						//_getCoordinates(_wmWindow, 'click', _newLineWidth, _newLineHeight);
-
+						
 						if(_newLineWidth < -1){
 							_verticLine.css({
 								width : 0,
@@ -471,7 +467,6 @@ jQuery(window).load(function() {
 				marginRightWM = 0 || parseInt($('.window__wm img:eq(0)').css('margin-right')),
 				marginBottomWM = 0 || parseInt($('.window__wm img:eq(0)').css('margin-bottom'));
 
-				_getCoordinates(_wmWindow, 'click', marginRightWM, marginBottomWM);
 			if (_wmWindow.hasClass('window__wm_tile')) return;
 
 			// сохраняем текущую позицию и размер WM для режима Single
