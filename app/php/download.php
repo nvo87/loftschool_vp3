@@ -13,8 +13,11 @@
 
 	//Получение реального размера картинки
 	$bg_size = getimagesize($bg_image);
-	$bg_width = $bg_size[0];
+	$bg_width = $bg_size[0];					//истинные размеры фона
 	$bg_height = $bg_size[1];
+
+	$bg_width_scale = $_POST['bg-width'];
+	$bg_height_scale = $_POST['bg-height'];
 
 	// Получение координат ватермарки
 	$coordinates_array = $_POST['coordinates'];
@@ -35,10 +38,11 @@
 		$wm_positionX=$coordinates_array[$i];
 		$wm_positionY=$coordinates_array[$i+1];
 
-		$k_x = $bg_width / 650; // Считаем коэффициент сдвига .650 - ширина окна. Вывести сюда данные через js
-		$k_y = $bg_height / 535; // Считаем коэффициент сдвига .535 - высота окна. Вывести сюда данные через js
+		$k_x = $bg_width / $bg_width_scale; // Считаем коэффициент сдвига .650 - ширина окна. Вывести сюда данные через js
+		$k_y = $bg_height / $bg_height_scale; // Считаем коэффициент сдвига .535 - высота окна. Вывести сюда данные через js
 		$wm_positionX_real = $k_x * $wm_positionX;
 		$wm_positionY_real = $k_y * $wm_positionY;
+
 
 		/**
 		 * Наложение слоя $wm_layer поверх слоя $bg_layer

@@ -32,6 +32,8 @@ jQuery(window).load(function() {
 				_wmFileInput	= _uploadsBlock.find('#wm-file'),				//получение файл-инпутов на форме
 				_bgFilePath		= _uploadsBlock.find('#bg-img-path'),
 				_wmFilePath		= _uploadsBlock.find('#wm-img-path'),
+				_bgWidthValue	= _uploadsBlock.find('#bg-width-value'),  //скрытый инпут с размерами фона, для передачи на сервер
+				_bgHeightValue	= _uploadsBlock.find('#bg-height-value'),
 
 			_positionBlock 	= _settingsForm.find('.settings__position'),		//блок позиционирования ватермарки
 				_xInput		= _positionBlock.find('#x-axis'),					//поля для вывода координат ватермарки
@@ -101,7 +103,6 @@ jQuery(window).load(function() {
 		//Напрямую из прослушки событий _wmWindow передать нельзя
 		function _dragWM () {
 			_getCoordinates(_wmWindow);
-			//_getCoordinatesArray();
 		}
 
 		/*инициализация слайдера для изменения прозрачности*/
@@ -231,7 +232,6 @@ jQuery(window).load(function() {
 				_wmMarginChange(axis, dir);
 			}
 
-			//_getCoordinatesArray();
 		}
 
 		/**
@@ -411,10 +411,29 @@ jQuery(window).load(function() {
 		}
 
 		function _getParametrs() {
+			var 
+				wmArray = $('.wm-img'),
+				coordinatesArray = [],
+				innerX = 0,
+				innerY = 0;
+
+			//получение массива с координатами ватермарок и запись их в скрытый инпут
+			wmArray.each(function(index, el) {
+				innerX = _getCoordinates($(el)).x;
+				innerY = _getCoordinates($(el)).y;
+			
+				coordinatesArray[index]=[innerX, innerY];
+			});
+			_coordinatesValue.val(coordinatesArray);
+
+			//получение размеров изображений
 			_bgWidth    = _bgWindow.width();
 			_bgHeight   = _bgWindow.height();
 			_wmWidth	= _wmWindow.width();
 			_wmHeight	= _wmWindow.height();
+
+			_bgWidthValue.val(_bgWidth);
+			_bgHeightValue.val(_bgHeight);
 		}
 
 		/**
@@ -468,26 +487,6 @@ jQuery(window).load(function() {
 			//_getCoordinatesArray();
 		}
 
-		//получение массива с координатами ватермарок и запись их в скрытый инпут
-		function _getCoordinatesArray () {
-			var 
-				wmArray = $('.wm-img'),
-				coordinatesArray = [],
-				innerX = 0,
-				innerY = 0;
-
-			wmArray.each(function(index, el) {
-				innerX = _getCoordinates($(el)).x;
-				innerY = _getCoordinates($(el)).y;
-			
-				coordinatesArray[index]=[innerX, innerY];
-			});
-
-			console.log(coordinatesArray);
-			console.log(_coordinatesValue);
-
-			_coordinatesValue.val(coordinatesArray);
-		}
 
 		function _oneWatermark () {
 			var currentSrcWM  = _wmWindow.find('img:eq(0)').attr('src'),
@@ -561,7 +560,7 @@ jQuery(window).load(function() {
 		function _submitApp (e) {
 			e.preventDefault();
 
-			$.when(_getCoordinatesArray())
+			$.when(_getParametrs())
 				.then(function () {
 					_form.trigger('submit');
 				});
