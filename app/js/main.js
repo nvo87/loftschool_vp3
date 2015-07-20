@@ -22,10 +22,18 @@ jQuery(window).load(function() {
 			_wmWidth	= _wmWindow.width(),
 			_wmHeight	= _wmWindow.height(),
 
-			_settingsForm 	= $('.wm-generator__settings'),						//блок с настройками
+			_settingsForm 	= $('.wm-generator__settings'),		//блок с настройками
+			_form = _settingsForm.find('#form'),
+			_disableLayer	= $('.disable'),					//слой, делающий настройки неактивными
 
 			_uploadsBlock 	= _settingsForm.find('.settings__upload'),			//блок загрузки файлов
 				_fileInput	= _uploadsBlock.find('.file-load__input-file'),		//получение файл-инпутов на форме
+				_bgFileInput	= _uploadsBlock.find('#bg-file'),				//получение файл-инпутов на форме
+				_wmFileInput	= _uploadsBlock.find('#wm-file'),				//получение файл-инпутов на форме
+				_bgFilePath		= _uploadsBlock.find('#bg-img-path'),
+				_wmFilePath		= _uploadsBlock.find('#wm-img-path'),
+				_bgWidthValue	= _uploadsBlock.find('#bg-width-value'),  //скрытый инпут с размерами фона, для передачи на сервер
+				_bgHeightValue	= _uploadsBlock.find('#bg-height-value'),
 
 			_positionBlock 	= _settingsForm.find('.settings__position'),		//блок позиционирования ватермарки
 				_xInput		= _positionBlock.find('#x-axis'),					//поля для вывода координат ватермарки
@@ -37,7 +45,8 @@ jQuery(window).load(function() {
 				_switchSingle = $('.switch__single'), 							//выключение режима "замостить"
 				_switchMulti  = $('.switch__multi'), 							//включение режима "замостить"
 				_switchValue  = $('.switch__input--hidden'), 					//скрытый инпут, для передачи режима в php
-				_switchMode	= 'single',											//режим в котором работаем, single - перемещение ватермарки, multi - клонириование
+				_switchMode	  = 'single',											//режим в котором работаем, single - перемещение ватермарки, multi - клонириование
+				_coordinatesValue = _positionBlock.find('#wm-coords'),							//скрытый инпут с координатами ватермарок
 
 				_currentDataWM = {}, // хранилище текущих данных позиции и размера вотермарка для переключения режима отображения
 
@@ -54,12 +63,26 @@ jQuery(window).load(function() {
 			_lineParent = $('.position__square-wrap');    // обертка для миниатюры;
 
 		function _setUpListeners () {
-			_wmWindow.on('mousemove', _getCoordinates);	//выводить координаты ватермарки при перетаскивании ее мышкой
+			_wmWindow.on('mousemove', _dragWM);			//выводить координаты ватермарки при перетаскивании ее мышкой
 			_arrows.on('click', _arrowsClickHandler);	//обработка нажатия по стрелочкам в зависимости от режима
 			_squares.on('click', _positionWM);			//позиционирование ватермарки по опорным точкам фоновой картинки
 			_switchMulti.on('click', _tileWatermark);
 			_switchSingle.on('click', _oneWatermark);
 			_resetBtn.on('click', _resetApp);
+			_submitBtn.on('click', _submitApp);
+			_bgFileInput.on('change', _checkDisabled);
+			_wmFileInput.on('change', _checkDisabled);
+
+		}
+
+		function _checkDisabled () {
+			if (!_bgFileInput.val()) {
+				_disableLayer.removeClass('disable-else').show();
+			} else if (!_wmFileInput.val()) {
+				_disableLayer.addClass('disable-else');
+			} else {
+				_disableLayer.hide(); 
+			}
 		}
 
 		/*инициализация свойства draggable (перетаскивание мышкой)*/
@@ -74,6 +97,14 @@ jQuery(window).load(function() {
 			_wmWindow.draggable({
 				containment: contVal
 			});
+		}
+
+		//функция-прослойка для вызова _getCoordinates(element) и передачи в нее _wmWindow в качестве аргумента.
+		//Напрямую из прослушки событий _wmWindow передать нельзя
+		function _dragWM () {
+			if (_switchMode === 'single') {
+				_getCoordinates(_wmWindow);
+			};
 		}
 
 		/*инициализация слайдера для изменения прозрачности*/
@@ -182,7 +213,9 @@ jQuery(window).load(function() {
 				at: $this.attr('data-pos-x') + " " + $this.attr('data-pos-y'),
 				of: _bgWindow
 			});
-			_getCoordinates();
+
+			_getCoordinates(_wmWindow);
+
 			_squares.removeClass('square-td--active');
 			$this.addClass('square-td--active');
 		} //end _positionWM()
@@ -199,6 +232,7 @@ jQuery(window).load(function() {
 			} else if (_switchMode === 'multi') {			//режим клонирования ватермарки
 				_wmMarginChange(axis, dir);
 			}
+
 		}
 
 		/**
@@ -211,8 +245,8 @@ jQuery(window).load(function() {
 
 			var xEnd 	= _bgWidth - _wmWidth, 			// крайняя позиция X
 				yEnd 	= _bgHeight - _wmHeight, 		// крайняя позиция Y
-				innerX  = _getCoordinates().x,				// текущая X координата ватермарки
-				innerY  = _getCoordinates().y,				// текущая Y координата ватермарки
+				innerX  = _getCoordinates(_wmWindow).x,				// текущая X координата ватермарки
+				innerY  = _getCoordinates(_wmWindow).y,				// текущая Y координата ватермарки
 
 				step 	= 5;								// шаг сдвига ватермарки, в пикселях
 
@@ -221,20 +255,20 @@ jQuery(window).load(function() {
 
 					if(_checkBorders(innerX, xEnd)) { 				//проверка границ, текущей координаты innerX в пределах xEnd
 						_moveWatermark(innerX, step, 'left');		//сдвинуть ватермарку, с координаты innerX на величину step по оси X
-						_getCoordinates();							//вывести конечные координаты в поля X, Y
+						_getCoordinates(_wmWindow);							//вывести конечные координаты в поля X, Y
 					} else {
 						_moveWatermark(0, 0, 'left');			//если вылазит за границу, то сбросить на начала экрана - сдвигать с координаты 0.
-						_getCoordinates();	
+						_getCoordinates(_wmWindow);	
 					}		
 
 				} else if (dir === 'DOWN') {
 
 					if(_checkBorders(innerX, xEnd)) {
 						_moveWatermark(innerX, -step, 'left');
-						_getCoordinates();
+						_getCoordinates(_wmWindow);
 					} else {
 						_moveWatermark(xEnd , 0, 'left');
-						_getCoordinates();	
+						_getCoordinates(_wmWindow);	
 					}
 
 				}
@@ -243,20 +277,20 @@ jQuery(window).load(function() {
 
 					if(_checkBorders(innerY, yEnd)) {
 						_moveWatermark(innerY, step, 'top');
-						_getCoordinates();
+						_getCoordinates(_wmWindow);
 					} else {
 						_moveWatermark(0, 0, 'top');
-						_getCoordinates();	
+						_getCoordinates(_wmWindow);	
 					}
 
 				} else if (dir === 'DOWN') {
 
 					if(_checkBorders(innerY, yEnd)) {
 						_moveWatermark(innerY, -step, 'top');
-						_getCoordinates();
+						_getCoordinates(_wmWindow);
 					} else {
 						_moveWatermark(yEnd , 0, 'top');
-						_getCoordinates();	
+						_getCoordinates(_wmWindow);	
 					}
 
 				}
@@ -283,7 +317,7 @@ jQuery(window).load(function() {
 					_innerTop = (_parentHeight - _newLineHeight)/2;
 
 					_wmImgs.css({'margin-bottom': _newLineHeight});
-					_getCoordinates('click', _newLineWidth, _newLineHeight);
+					_getCoordinates(_wmWindow, 'click', _newLineWidth, _newLineHeight);
 
 					if(_newLineHeight < _parentHeight){
 						_horizLine.css({
@@ -296,7 +330,7 @@ jQuery(window).load(function() {
 					_innerTop = (_parentHeight - _newLineHeight)/2;
 
 					_wmImgs.css({'margin-bottom': _newLineHeight});
-					_getCoordinates('click', _newLineWidth, _newLineHeight);
+					_getCoordinates(_wmWindow, 'click', _newLineWidth, _newLineHeight);
 
 					if(_newLineHeight < -1){
 						_horizLine.css({
@@ -318,7 +352,7 @@ jQuery(window).load(function() {
 						_innerLeft = (_parentWidth - _newLineWidth)/2;
 
 						_wmImgs.css({'margin-right': _newLineWidth});
-						_getCoordinates('click', _newLineWidth, _newLineHeight);
+						_getCoordinates(_wmWindow, 'click', _newLineWidth, _newLineHeight);
 
 						if(_newLineWidth < _parentWidth) {
 							_verticLine.css({
@@ -331,7 +365,7 @@ jQuery(window).load(function() {
 						_innerLeft = (_parentWidth - _newLineWidth)/2;
 
 						_wmImgs.css({'margin-right': _newLineWidth});
-						_getCoordinates('click', _newLineWidth, _newLineHeight);
+						_getCoordinates(_wmWindow, 'click', _newLineWidth, _newLineHeight);
 
 						if(_newLineWidth < -1){
 							_verticLine.css({
@@ -352,29 +386,25 @@ jQuery(window).load(function() {
 
 
 		/*Получение и вывод координат ватермарки в окошки X и Y*/
-		/* Например, чтобы получить x=_getCoordinates().x */
-		function _getCoordinates (e, pX, pY) {
+		/* Например, чтобы получить x=_getCoordinates(element).x */
+		function _getCoordinates (element, e, pX, pY) {
 			//вычисление координат относительно начала фоновой картинки
 			var posX, posY;
 			// pX, pY - отступы в режиме Multi, если их нет - берем координаты позиции Вотермарка
 			if (typeof pX !== 'undefined') {
 				posX = parseInt(pX);
 			} else {
-				posX = parseInt(_wmWindow.offset().left - _bgWindow.offset().left);
+				posX = parseInt(element.offset().left - _bgWindow.offset().left);
 			}
 			if (typeof pY !== 'undefined') {
 				posY = parseInt(pY);
 			} else {
-				posY = parseInt(_wmWindow.offset().top - _bgWindow.offset().top);
+				posY = parseInt(element.offset().top - _bgWindow.offset().top);
 			}
-			//var posX = parseInt(pX) || _wmWindow.offset().left - _bgWindow.offset().left, 
-				//posY = parseInt(pY) || _wmWindow.offset().top - _bgWindow.offset().top;
 
 				if (e) {
 					if (e.type === 'mousemove' && _switchMode === 'multi') return;
 				}
-
-				//console.log(pX, pY);
 
 				_xInput.val(parseInt(posX)); //вывод координаты в поле X
 				_yInput.val(parseInt(posY));
@@ -410,10 +440,29 @@ jQuery(window).load(function() {
 		}
 
 		function _getParametrs() {
+			var 
+				wmArray = $('.wm-img'),
+				coordinatesArray = [],
+				innerX = 0,
+				innerY = 0;
+
+			//получение массива с координатами ватермарок и запись их в скрытый инпут
+			wmArray.each(function(index, el) {
+				innerX = _getCoordinates($(el)).x;
+				innerY = _getCoordinates($(el)).y;
+			
+				coordinatesArray[index]=[innerX, innerY];
+			});
+			_coordinatesValue.val(coordinatesArray);
+
+			//получение размеров изображений
 			_bgWidth    = _bgWindow.width();
 			_bgHeight   = _bgWindow.height();
 			_wmWidth	= _wmWindow.width();
 			_wmHeight	= _wmWindow.height();
+
+			_bgWidthValue.val(_bgWidth);
+			_bgHeightValue.val(_bgHeight);
 		}
 
 		/**
@@ -436,7 +485,7 @@ jQuery(window).load(function() {
 				marginRightWM = 0 || parseInt($('.window__wm img:eq(0)').css('margin-right')),
 				marginBottomWM = 0 || parseInt($('.window__wm img:eq(0)').css('margin-bottom'));
 
-				_getCoordinates('click', marginRightWM, marginBottomWM);
+				_getCoordinates(_wmWindow, 'click', marginRightWM, marginBottomWM);
 			if (_wmWindow.hasClass('window__wm_tile')) return;
 
 			// сохраняем текущую позицию и размер WM для режима Single
@@ -467,8 +516,9 @@ jQuery(window).load(function() {
 			_wmWindow.append(htmlWM);
 			_draggableInit('free'); // инициируем перетаскивание без ограничений
 			_switchMultiSettings();
-
+			//_getCoordinatesArray();
 		}
+
 
 		function _oneWatermark () {
 			var currentSrcWM  = _wmWindow.find('img:eq(0)').attr('src'),
@@ -510,14 +560,17 @@ jQuery(window).load(function() {
 			_switchValue.val(_switchMode);	
 			_squares.eq(0).addClass('square-td--active');
 			_positionBlock.removeClass('wm-multi');
-			_xLabel.removeClass('x-multi').addClass('x-singl');
-			_yLabel.removeClass('y-multi').addClass('y-singl');	
-			_getCoordinates();						//показать в полях X Y текущие координаты
+			_xLabel.addClass('x-singl');
+			_yLabel.addClass('y-singl');	
+			_getCoordinates (_wmWindow);						//показать в полях X Y текущие координаты
 		}
 
 		function _resetApp () {
 			_bgImg.remove();
 			_wmImg.remove();
+			_bgFileInput.val('');
+			_wmFileInput.val('');
+			_checkDisabled();
 
 			var url = './php/reset.php';
 			$.ajax({
@@ -534,24 +587,14 @@ jQuery(window).load(function() {
 			});
 		}
 
-		function _submitApp () {
-			var url = './php/test.php';
+		function _submitApp (e) {
+			e.preventDefault();
 
-			$.ajax({
-				url: url,
-				type: 'POST',
-				dataType: '',
-				data: {val: 'value1'},
-			})
-			.done(function() {
-				console.log("success");
-			})
-			.fail(function() {
-				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
-			});	
+			$.when(_getParametrs())
+				.then(function () {
+					_form.trigger('submit');
+				});
+		
 		}
 
 		return {
@@ -560,6 +603,7 @@ jQuery(window).load(function() {
 				_fileUpload ();
 				_draggableInit ();
 				_opacitySliderInit ();
+				_checkDisabled();
 			}
 		};
 

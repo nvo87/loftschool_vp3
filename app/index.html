@@ -48,12 +48,14 @@
 			<!--settings--> 
 			<div class="wm-generator__settings">
 				<h2 class="settings__title">Настройки</h2>
-				<form action="php/download.php" method="post" enctype="multipart/form-data">
+				<form action="php/download.php" method="post" enctype="multipart/form-data" id="form">
 
 				<!--upload-->
 					<div class="settings__group separate-line">
 						<div class="settings__upload">
 							<div class="file-load">
+								<input type="hidden" name="bg-width" id="bg-width-value">
+								<input type="hidden" name="bg-height" id="bg-height-value">
 								<label class="label">Исходное изображение</label>
 								<div class="file-load__block">
 									<input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="bg-img-path" name="bg-img-path" value=""  data-tooltip="Вы не выбрали изображение">
@@ -62,6 +64,7 @@
 								</div>
 							</div>
 							<div class="file-load">
+							<div class="disable"></div>
 								<label class="label">Водяной знак</label>
 								<div class="file-load__block">
 									<input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="wm-img-path" name="wm-img-path" value="" data-tooltip="Вы не выбрали изображение">
@@ -77,6 +80,7 @@
 						<div class="settings__position clearfix">
 							<div class="position__header clearfix">
 								<h3 class="label">Положение</h3>
+								<input type="hidden" name="coordinates" id="wm-coords" value="">
 								<div class="position__switch">
 									<div class="switch switch__multi">multi</div>
 									<div class="switch switch__single switch--active">single</div>
@@ -187,10 +191,11 @@
 		<!--endbower  -->
 		<!-- endbuild -->
 		<!-- build:js js/main.js -->
-		<!-- <script src="js/switch.js"></script> -->
 		<script src="js/plugins.js"></script>
-		<!-- <script src="js/file-upload.js"></script> -->
 		<script src="js/main.js"></script>
+		<!-- <script src="js/file-upload.js"></script> -->
+		<!-- <script src="js/disable.js"></script> -->
+		<!-- <script src="js/switch.js"></script> -->
 		<!-- <script src="js/watermark.js"></script> -->
 		<!-- <script src="js/coordinates.js"></script> -->
 		<!-- <script src="js/watermark-opacity.js"></script> -->
