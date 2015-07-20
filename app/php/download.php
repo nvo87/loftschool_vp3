@@ -55,7 +55,7 @@
 
 		//отбор ватермарок, координаты которых лежат рядом с границами фонового изображения
 		//так же отбор по количеству попавших ватермарок, из-за нагрузки на сервер
-		if ( $k<1000 && ($wm_positionX_real>-$wm_width && $wm_positionY_real>-$wm_height) && ($wm_positionX_real<$bg_width && $wm_positionY_real<$bg_height)) {
+		if ( $k<110 && ($wm_positionX_real>-$wm_width && $wm_positionY_real>-$wm_height) && ($wm_positionX_real<$bg_width && $wm_positionY_real<$bg_height)) {
 
 
 			//echo 'отобраные координаты ватермарок: <br>'.$wm_positionX_real.'xx'.$wm_positionY_real.'<br>';
@@ -79,11 +79,11 @@
 	$bg_layer->save($path, $result_name, true, null, $quality);
 
 	// Если требуется показать созданное изображение в браузере
-	$image = $bg_layer->getResult();
+/*	$image = $bg_layer->getResult();
 	header('Content-type: image/jpeg');
 	header('Content-Disposition: filename="result.jpg"');
 	imagejpeg($image, null, $quality);
-	exit;
+	exit;*/
 
 	//отдаем файл на скачивание
 	header('Content-Description: File Transfer');
