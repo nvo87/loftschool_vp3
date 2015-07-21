@@ -52,7 +52,7 @@ jQuery(window).load(function() {
 			_opacityBlock 	= _settingsForm.find('.settings__transparency'),	//блок изменения прозрачности
 				_slider 	= _opacityBlock.find('.transparency__slider'),		//слайдер изменения прозрачности
 				_opacityValue = _opacityBlock.find('.transparency__input--hidden'),	//скрытый инпут, в него переносится значение со слайдера для передачи в php
-				OPACITY_DEFAULT = 0.8,
+				OPACITY_DEFAULT = 0.5,
 
 			_buttonsBlock 	= _settingsForm.find('.settings__buttons'),
 				_submitBtn	= _buttonsBlock.find('.btn-submit'),
