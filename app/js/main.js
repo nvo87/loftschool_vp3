@@ -214,12 +214,14 @@ jQuery(window).load(function() {
 			    max: 1,
 			    orientation: "horizontal",
 			    step: 0.05,
-			    slide: changeOpacity
+			    slide: function(){
+			    	changeOpacity();
+			    }
 			});
 		}
 		function changeOpacity(opacity){
 			if (typeof opacity === 'undefined') {
-				opacity = _slider.slider("value");
+				opacity = _slider.slider('value');
 			}
 
 		    _wmWindow.css('opacity', opacity);
