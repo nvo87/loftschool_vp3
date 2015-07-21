@@ -106,6 +106,7 @@ jQuery(window).load(function() {
 						fakeInput.val(data.name);					//вписывает имя файла в инпут
 						fileLoadWindow(data.rootUrl, data.width, data.height, fakeInputID);	//загрузка картинки в свой контейнер
 						_getParametrs();							//получает размеры загруженных, отмасштабированых картинок
+						changeOpacity(OPACITY_DEFAULT);				//установить начальную прозрачность для ватермарки
 				}
 			});
 
