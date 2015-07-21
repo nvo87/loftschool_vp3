@@ -52,6 +52,7 @@ jQuery(window).load(function() {
 			_opacityBlock 	= _settingsForm.find('.settings__transparency'),	//блок изменения прозрачности
 				_slider 	= _opacityBlock.find('.transparency__slider'),		//слайдер изменения прозрачности
 				_opacityValue = _opacityBlock.find('.transparency__input--hidden'),	//скрытый инпут, в него переносится значение со слайдера для передачи в php
+				OPACITY_DEFAULT = 0.8,
 
 			_buttonsBlock 	= _settingsForm.find('.settings__buttons'),
 				_submitBtn	= _buttonsBlock.find('.btn-submit'),
@@ -207,19 +208,21 @@ jQuery(window).load(function() {
 		function _opacitySliderInit () {
 			_slider.slider({
 			    range: "min",
-			    value: 1,
+			    value: OPACITY_DEFAULT,
 			    min: 0,
 			    max: 1,
 			    orientation: "horizontal",
 			    step: 0.05,
 			    slide: changeOpacity
 			});
-			function changeOpacity(){
-			    var opacity = _slider.slider("value");
+		}
+		function changeOpacity(opacity){
+			if (typeof opacity === 'undefined') {
+				opacity = _slider.slider("value");
+			}
 
-			    _wmWindow.css('opacity', opacity);
-			    _opacityValue.val(opacity); //значение заносится в скрытый инпут для передачи в php
-			};
+		    _wmWindow.css('opacity', opacity);
+		    _opacityValue.val(opacity); //значение заносится в скрытый инпут для передачи в php
 		}
 
 	//////////////////////
@@ -566,27 +569,10 @@ jQuery(window).load(function() {
 	//кнопки //
 	///////////
 		function _resetApp () {
-			_bgImg.remove();
-			_wmWindow.children().remove();
-			_bgFileInput.val('');
-			_wmFileInput.val('');
-			_bgFilePath.val('');
-			_wmFilePath.val('');
-			_checkDisabled();
-
-			var url = './php/reset.php';
-			$.ajax({
-				url: url,
-				type: 'POST',
-				data: {},
-				dataType: '',
-			})
-			.done(function() {
-				console.log("папка img/upload/ очищена");
-			})
-			.fail(function() {
-				console.log("ошибка очистки папки");
-			});
+			_switchSingleSettings();
+			_squares.eq(0).trigger('click');
+			_opacitySliderInit ();
+			changeOpacity(OPACITY_DEFAULT);
 		}
 
 		function _submitApp (e) {
