@@ -1,10 +1,47 @@
+<?php 
+	
+	session_start();
+	$langs = array("ru","en");
+	$default_lang = "ru";
+
+	if(@$_SESSION['now_lang']) {
+	// Проверяем если выбранный язык доступен для выбора
+		if(!in_array($_SESSION['now_lang'], $langs)) {
+		// Неправильный выбор, возвращаем язык по умолчанию
+			$_SESSION['now_lang'] = $default_lang;
+		}
+	}
+	else {
+		$_SESSION['now_lang'] = $default_lang;
+	}
+
+	// Выбранный язык отправлен скрипту через GET
+	$language = addslashes($_GET['lang']);
+	if($language) {
+		// Проверяем если выбранный язык доступен для выбора
+		if(!in_array($language, $langs)) {
+			// Неправильный выбор, возвращаем язык по умолчанию
+			$_SESSION['now_lang'] = $default_lang;
+		}
+		else {
+			// Сохраняем язык в сессии
+			$_SESSION['now_lang'] = $language;
+		}
+	}
+	// Открываем текущий язык
+	$current_lang = addslashes($_SESSION['now_lang']);
+	include_once ("php/language/".$current_lang.".php");
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="ru-RU">
 
 	<head>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>Watermark Generator </title>
+		<title><?php echo $lang['title_text'] ?></title>
 		<meta name="description" content="group2_vp3-loftSchool">
 		<meta name="keywords" content="group2_vp3-loftSchool">
 		<meta name="author" content="group2_vp3-loftSchool">
@@ -34,7 +71,7 @@
 	<div class="wrapper">
 		<div class="wm-generator clearfix">
 			<div class="wm-generator__main">
-				<h1 class="main__title">Генератор водяных знаков</h1>
+				<h1 class="main__title"><?php echo $lang['title_h1_text'] ?></h1>
 
 				<!--main-window--> 
 				<div class="main__window clearfix">
@@ -47,7 +84,7 @@
 
 			<!--settings--> 
 			<div class="wm-generator__settings">
-				<h2 class="settings__title">Настройки</h2>
+				<h2 class="settings__title"><?php echo $lang['settings_text'] ?></h2>
 				<form action="php/download.php" method="post" enctype="multipart/form-data" id="form">
 
 				<!--upload-->
@@ -56,18 +93,18 @@
 							<div class="file-load">
 								<input type="hidden" name="bg-width" id="bg-width-value">
 								<input type="hidden" name="bg-height" id="bg-height-value">
-								<label class="label">Исходное изображение</label>
+								<label class="label"><?php echo $lang['bg_image_text'] ?></label>
 								<div class="file-load__block">
-									<input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="bg-img-path" name="bg-img-path" value=""  data-tooltip="Вы не выбрали изображение">
+									<input class="file-load__input-text" type="text" placeholder="<?php echo $lang['input_image_text'] ?>" id="bg-img-path" name="bg-img-path" value=""  data-tooltip="Вы не выбрали изображение">
 									<button class="file-load__btn"></button>
 									<input type="file" value="" id="bg-file" name="files[]" class="file-load__input-file btn">
 								</div>
 							</div>
 							<div class="file-load">
 							<div class="disable"></div>
-								<label class="label">Водяной знак</label>
+								<label class="label"><?php echo $lang['wm_image_text'] ?></label>
 								<div class="file-load__block">
-									<input class="file-load__input-text" type="text" placeholder="Загрузите изображение" id="wm-img-path" name="wm-img-path" value="" data-tooltip="Вы не выбрали изображение">
+									<input class="file-load__input-text" type="text" placeholder="<?php echo $lang['input_image_text'] ?>" id="wm-img-path" name="wm-img-path" value="" data-tooltip="Вы не выбрали изображение">
 									<button class="file-load__btn"></button>
 									<input type="file" value="" id="wm-file" name="files[]" class="file-load__input-file btn">
 								</div>
@@ -79,7 +116,7 @@
 					<div class="settings__group separate-line">
 						<div class="settings__position clearfix">
 							<div class="position__header clearfix">
-								<h3 class="label">Положение</h3>
+								<h3 class="label"><?php echo $lang['position_text'] ?></h3>
 								<input type="hidden" name="coordinates" id="wm-coords" value="">
 								<div class="position__switch">
 									<div class="switch switch__multi">multi</div>
@@ -138,7 +175,7 @@
 					<!--transparency-->
 					<div class="settings__group separate-line">
 						<div class="settings__transparency">
-							<h3 class="label">Прозрачность</h3>
+							<h3 class="label"><?php echo $lang['transparency_text'] ?></h3>
 							<div class="transparency__slider">
 								<span class="transparency__point ui-slider-handle ui-state-default ui-corner-all"></span>
 								<input type="hidden" class="transparency__input--hidden" name="transparency" value="1">
@@ -150,8 +187,8 @@
 					<!--buttons-->
 					<div class="settings__group">
 						<div class="settings__buttons">
-							<button type="reset" class="btn-reset">Сброс</button>
-							<button type="submit" class="btn-submit">Скачать</button>
+							<button type="reset" class="btn-reset"><?php echo $lang['reset_text'] ?></button>
+							<button type="submit" class="btn-submit"><?php echo $lang['download_text'] ?></button>
 						</div>
 					</div>
 
@@ -162,8 +199,8 @@
 		<!--side-menu-->   
 		<div class="side-menu">
 			<ul class="side-menu__languages">
-				<li class="languages__item-ru"><a class="languages__link" href="">рус</a></li>
-				<li class="languages__item-en"><a class="languages__link" href="">eng</a></li>
+				<li class="languages__item-ru"><a class="languages__link" href="index.php?lang=ru">рус</a></li>
+				<li class="languages__item-en"><a class="languages__link" href="index.php?lang=en">eng</a></li>
 			</ul>
 			<ul class="side-menu__social">
 				<li class="social__item-like"><a href="" class="social__link">share<span class="social__icon icon-like"></span></a></li>
@@ -175,7 +212,7 @@
 
 		<!--footer--> 
 		<footer class="page-footer">
-			<p class="page-footer__text">© 2015. Это мой сайт, пожалуйста, не копируйте и не воруйте его.</p>
+			<p class="page-footer__text">© 2015. <?php echo $lang['copyright_text'] ?></p>
 		</footer>
 
 		<!-- build:js js/vendor.js -->
