@@ -203,11 +203,18 @@
 				<li class="languages__item-en"><a class="languages__link" href="index.php?lang=en">eng</a></li>
 			</ul>
 			<ul class="side-menu__social">
-				<li class="social__item-like"><a href="" class="social__link">share<span class="social__icon icon-like"></span></a></li>
-				<li class="social__item-fb"><a class="social__link" href="">facebook<span class="social__icon icon-fb"></span></a></li>
-				<li class="social__item-tw"><a class="social__link" href="">twitter<span class="social__icon icon-tw"></span></a></li>
-				<li class="social__item-vk"><a class="social__link" href="" onclick="Share.vkontakte('URL','TITLE','IMG_PATH','DESC')">vkontakte<span class="social__icon icon-vk"></span></a></li>
-			</ul>
+				<li class="social__item-like">
+					<a href="" class="social__link" >share<span class="social__icon icon-like"></span></a>
+				</li>
+				<li class="social__item-fb">
+					<a class="social__link" id="fb" href="">facebook<span class="social__icon icon-fb"></span></a>
+				</li>
+				<li class="social__item-tw">
+					<a class="social__link" id="tw" href="">twitter<span class="social__icon icon-tw"></span></a>
+				</li>
+				<li class="social__item-vk">
+					<a class="social__link" id="vk" href="">vkontakte<span class="social__icon icon-vk"></span></a>
+				</li>
 		</div>
 
 		<!--footer--> 
@@ -229,6 +236,7 @@
 		<!-- build:js js/main.js -->
 		<script src="js/plugins.js"></script>
 		<script src="js/main.js"></script>
+		<script src="js/social.js"></script>
 		<!-- <script src="js/file-upload.js"></script> -->
 		<!-- <script src="js/disable.js"></script> -->
 		<!-- <script src="js/switch.js"></script> -->
