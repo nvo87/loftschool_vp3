@@ -72,7 +72,7 @@
 		<div class="wm-generator clearfix">
 			<div class="wm-generator__main">
 				<h1 class="main__title"><?php echo $lang['title_h1_text'] ?></h1>
-
+				<p class="error-msg"></p>
 				<!--main-window--> 
 				<div class="main__window clearfix">
 					<div class="window__bg">
@@ -150,7 +150,7 @@
 									<div class="coordinates__block clearfix">
 										<div class="coordinates__axis x-singl"></div>
 										<div class="coordinates__input-wrap">
-											<input type="text" name="x-axis" value="0" class="coordinates__input " id="x-axis">
+											<input type="text" name="x-axis" value="0" class="coordinates__input " id="x-axis" disabled>
 										</div>
 										<div class="coordinates__arrows">
 											<a href="#" class="coordinates_arrows coordinates__arrows-up x-arrows-up" data-axis="X" data-dir="UP"></a>
@@ -160,7 +160,7 @@
 									<div class="coordinates__block  clearfix">
 										<div class="coordinates__axis y-singl"></div>
 										<div class="coordinates__input-wrap">
-											<input type="text" name="y-axis" value="0" class="coordinates__input" id="y-axis">
+											<input type="text" name="y-axis" value="0" class="coordinates__input" id="y-axis" disabled>
 										</div>
 										<div class="coordinates__arrows">
 											<a href="#" class="coordinates_arrows coordinates__arrows-up y-arrows-up" data-axis="Y" data-dir="UP"></a>
@@ -206,7 +206,7 @@
 				<li class="social__item-like"><a href="" class="social__link">share<span class="social__icon icon-like"></span></a></li>
 				<li class="social__item-fb"><a class="social__link" href="">facebook<span class="social__icon icon-fb"></span></a></li>
 				<li class="social__item-tw"><a class="social__link" href="">twitter<span class="social__icon icon-tw"></span></a></li>
-				<li class="social__item-vk"><a class="social__link" href="">vkontakte<span class="social__icon icon-vk"></span></a></li>
+				<li class="social__item-vk"><a class="social__link" href="" onclick="Share.vkontakte('URL','TITLE','IMG_PATH','DESC')">vkontakte<span class="social__icon icon-vk"></span></a></li>
 			</ul>
 		</div>
 

@@ -42,7 +42,7 @@
 	$wm_opacity=$_POST['transparency']*100; //в процентах
 	$wm_layer->opacity($wm_opacity);
 
-	$k=0; //количество ватермарок попавших на фон
+	$max_wm=0; //количество ватермарок попавших на фон
 
 	//Цикл перебора всех ватермарок для наложения на фон
 	$length = count($coordinates_array);
@@ -53,9 +53,9 @@
 		$wm_positionX_real = $k_x * $wm_positionX;
 		$wm_positionY_real = $k_y * $wm_positionY;
 
-		//отбор ватермарок, координаты которых лежат рядом с границами фонового изображения
+		//отбор ватермарок, координаты которых попадают на фоновое изображение
 		//так же отбор по количеству попавших ватермарок, из-за нагрузки на сервер
-		if ( $k<110 && ($wm_positionX_real>-$wm_width && $wm_positionY_real>-$wm_height) && ($wm_positionX_real<$bg_width && $wm_positionY_real<$bg_height)) {
+		if ( $max_wm<110 && ($wm_positionX_real>-$wm_width && $wm_positionY_real>-$wm_height) && ($wm_positionX_real<$bg_width && $wm_positionY_real<$bg_height)) {
 
 
 			//echo 'отобраные координаты ватермарок: <br>'.$wm_positionX_real.'xx'.$wm_positionY_real.'<br>';
@@ -70,7 +70,7 @@
 			 */
 			$bg_layer->addLayerOnTop($wm_layer, $wm_positionX_real, $wm_positionY_real, $wm_position);
 
-			$k++;
+			$max_wm++;
 		} 
 	}
 
@@ -97,5 +97,4 @@
 	readfile($result_file);
 	exit;
  ?>
-
 <!-- <img src="<?php echo $result_file ?>" alt=""> -->

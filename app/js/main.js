@@ -1,5 +1,9 @@
 jQuery(window).load(function() {
 
+	wmGeneratorApp.init();
+
+});
+
 	var wmGeneratorApp = (function () {
 		
 		var
@@ -25,6 +29,7 @@ jQuery(window).load(function() {
 			_settingsForm 	= $('.wm-generator__settings'),		//блок с настройками
 			_form = _settingsForm.find('#form'),
 			_disableLayer	= $('.disable'),					//слой, делающий настройки неактивными
+			_errorMsg = $('.error-msg'),                         //сообщение в случае ошибки при загрузке картинки
 
 			_uploadsBlock 	= _settingsForm.find('.settings__upload'),			//блок загрузки файлов
 				_fileInput	= _uploadsBlock.find('.file-load__input-file'),		//получение файл-инпутов на форме
@@ -103,6 +108,7 @@ jQuery(window).load(function() {
 						fakeInput 	= _this.parent().find('.file-load__input-text'), //соответствующий инпут для вывода имени файла
 						fakeInputID = _this.attr('id');				//id, чтобы определить куда грузить картинку, в bg или в wm
 
+						_errorMsg.html(data.error_msg);				//показать ошибки при загрузке
 						fakeInput.val(data.name);					//вписывает имя файла в инпут
 						fileLoadWindow(data.rootUrl, data.width, data.height, fakeInputID);	//загрузка картинки в свой контейнер
 						_getParametrs();							//получает размеры загруженных, отмасштабированых картинок
@@ -572,7 +578,8 @@ jQuery(window).load(function() {
 	///////////
 	//кнопки //
 	///////////
-		function _resetApp () {
+		function _resetApp (e) {
+			e.preventDefault();
 			_switchSingleSettings();
 			_squares.eq(0).trigger('click');
 			_opacitySliderInit ();
@@ -599,7 +606,3 @@ jQuery(window).load(function() {
 		};
 
 	}());
-
-	wmGeneratorApp.init();
-
-});

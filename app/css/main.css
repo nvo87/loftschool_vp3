@@ -56,7 +56,12 @@ generator
 	font-family: 'segoeuilight';
 	font-weight: normal;
 }
-
+.error-msg{
+	text-align: center;
+	color: #FFF;
+	position: absolute;
+	top: 47px;
+}
 /*
 main-window
 */
@@ -599,3 +604,4 @@ footer
 	font-weight: 300;
 	text-align: center;
 }
+
