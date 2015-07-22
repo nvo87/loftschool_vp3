@@ -106,7 +106,7 @@ jQuery(window).load(function() {
 						fakeInput.val(data.name);					//вписывает имя файла в инпут
 						fileLoadWindow(data.rootUrl, data.width, data.height, fakeInputID);	//загрузка картинки в свой контейнер
 						_getParametrs();							//получает размеры загруженных, отмасштабированых картинок
-						changeOpacity(OPACITY_DEFAULT);				//установить начальную прозрачность для ватермарки
+						_changeOpacity(OPACITY_DEFAULT);				//установить начальную прозрачность для ватермарки
 				}
 			});
 
@@ -215,11 +215,12 @@ jQuery(window).load(function() {
 			    orientation: "horizontal",
 			    step: 0.05,
 			    slide: function(){
-			    	changeOpacity();
+			    	_changeOpacity();
 			    }
 			});
 		}
-		function changeOpacity(opacity){
+		/*Изменение прозрачности ватермарки*/
+		function _changeOpacity(opacity){
 			if (typeof opacity === 'undefined') {
 				opacity = _slider.slider('value');
 			}
@@ -575,13 +576,13 @@ jQuery(window).load(function() {
 			_switchSingleSettings();
 			_squares.eq(0).trigger('click');
 			_opacitySliderInit ();
-			changeOpacity(OPACITY_DEFAULT);
+			_changeOpacity(OPACITY_DEFAULT);
 		}
 
 		function _submitApp (e) {
 			e.preventDefault();
 
-			$.when(_getParametrs())
+			$.when(_getParametrs(), _getMargin())
 				.then(function () {
 					_form.trigger('submit');
 				});

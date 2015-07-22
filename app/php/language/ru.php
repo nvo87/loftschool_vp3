@@ -6,7 +6,7 @@
 		"settings_text" 		=> "Настройки",
 		"bg_image_text" 		=> "Исходное изображение",
 		"wm_image_text" 		=> "Водяной знак",
-		"input_image_text"			=> "Upload image",
+		"input_image_text"			=> "Загрузите изображение",
 		"position_text" 		=> "Положение",
 		"transparency_text" 	=> "Прозрачность",
 		"reset_text" 		=> "Сброс",
