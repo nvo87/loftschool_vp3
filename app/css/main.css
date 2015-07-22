@@ -50,11 +50,12 @@ generator
 	margin: 0;
 }
 .main__title{
-	margin: 0 0 53px;
+	margin: 0px 0 53px -3px;
 	line-height: 1.35em;
 	color: #FFF;
 	font-family: 'segoeuilight';
 	font-weight: normal;
+	font-size: 2.23em;
 }
 .error-msg{
 	text-align: center;
@@ -146,9 +147,10 @@ settings
 	margin: 0;
 }
 .settings__title{
-	margin: 21px 20px 29px 12px;
+	margin: 0 20px 32px 18px;
 	text-align: center;
 	font-weight: normal;
+	font-size: 1.62em;
 }
 .settings__group{
 	margin-bottom: 12px;
@@ -178,7 +180,7 @@ settings
 }
 .separate-line{
 	border-bottom: 1px solid #f4c3c2;
-	margin-bottom: 12px;
+	margin-bottom: 15px;
 	position: relative;
 }
 .settings__upload, .settings__position, .settings__transparency, .settings__buttons{
@@ -193,13 +195,13 @@ settings
 upload
 */
 .file-load{
-	margin-bottom: 15px;
+	margin-bottom: 19px;
 }
 .label{
 	display: block;
-	margin: 0 0 7px;
+	margin: 0 0 8px;
 	color: #2e3641;
-	font-size: .875em;
+	font-size: .86em;
 }
 .file-load__block{
 	display: inline-block;
@@ -223,7 +225,7 @@ upload
 	position: absolute;
 	top: 0;
 	right: 0;
-	width: 38px;
+	width: 39px;
 	height: 27px;
 	background: url(../img/sprite.png) -273px -46px #f97e76;
 	-moz-border-radius: 0 4px 4px 0;
@@ -254,6 +256,12 @@ upload
  /*
 position
 */
+.settings__position{
+	margin-bottom: 24px;
+}
+.position__header{
+	margin-bottom: 8px;
+}
 .position__switch{
 	float: right;
 	height: 19px;
@@ -300,13 +308,20 @@ position
 .position__square-wrap{
 	position: relative;
 	float: left;
+	width: 101px;
+	height: 103px;
+	overflow: hidden;
+	border-radius: 3px;
  }
 .position__square{
 	display: table;
-	width: 100px;
-	height: 100px;
 	background: #dae0e8;
 	border-collapse: collapse;
+	float: left;
+	border: 1px solid #9eb2c0;
+	width: 100px;
+	height: 102px;
+	overflow: hidden;
 	border-radius: 3px;
 }
 .square-tr{
@@ -315,9 +330,15 @@ position
 }
 .square-td{
 	display: table-cell;
-	width: 34px;
+	width: 32px;
 	height: 32px;
 	border: 1px solid #9eb2c0;
+	margin: 0;
+	padding: 0
+	-webkit-transition: background 0.2s ease-out 0s;
+	-moz-transition: background 0.2s ease-out 0s;
+	-o-transition: background 0.2s ease-out 0s;
+	transition: background 0.2s ease-out 0s;
 }
 .square-td:hover{
 	background:#c1cfd9;
@@ -339,7 +360,7 @@ position
 	font-size: 16px;
 	height: 30px;
 	width: 10px;
-	margin-top: 12px;
+	margin-top: 14px;
 }
 .x-singl:before{
 	content: "X";
@@ -349,7 +370,7 @@ position
 .y-singl:before{
 	content: "Y";
 	position: absolute;
-	right: 93px;
+	right: 94px;
 }
 
 .coordinates__input-wrap{
@@ -366,7 +387,7 @@ position
 	height: 46px;
 	text-align: center;
 	background: #f1f1f5;
-	margin-top: -3px;
+	margin-top: -5px;
 	margin-left: -3px;
 	outline: 0;
 	font-size: 24px;
@@ -378,25 +399,25 @@ position
 	margin: 0 0 0 3px;
 }
 .coordinates__arrows-up{
-	background: url(../img/sprite.png) -9px -45px no-repeat;
+	background: url(../img/sprite.png) -10px -45px no-repeat;
 	cursor: pointer;
 	height: 22px;
 	width: 18px;
 		display: block;
 }
 .coordinates__arrows-up:hover{
-	background: url(../img/sprite.png) -34px -45px no-repeat;
+	background: url(../img/sprite.png) -35px -45px no-repeat;
 	 cursor: pointer;
 }
 .coordinates__arrows-down{
-	background: url(../img/sprite.png) -9px -70px no-repeat;
+	background: url(../img/sprite.png) -10px -68px no-repeat;
 	cursor: pointer;
 	height: 22px;
 	width: 18px;
 		display: block;
 }
 .coordinates__arrows-down:hover{
-	background: url(../img/sprite.png) -34px -70px no-repeat;
+	background: url(../img/sprite.png) -35px -68px no-repeat;
 	 cursor: pointer;
 }
 .wm-multi .x-multi{
@@ -445,6 +466,9 @@ position
 /*
 transparency
 */
+.settings__transparency{
+	margin-bottom: 33px;
+}
 .transparency__slider{
 	height: 3px;
 	width: 218px;
@@ -469,7 +493,7 @@ transparency
 	 background: url(../img/sprite.png) -150px -58px no-repeat;
 }
 .settings__buttons{
-	margin-top:80px;
+	margin-top: 56px;	
 }
 .btn-reset, .btn-submit{
 	font-size: 1.125em;
@@ -484,10 +508,34 @@ transparency
 .btn-reset{
 	background: #c1cfd9;
 }
+.btn-reset:hover{
+	border: 1px solid #a6b2bb;
+	background: #afbcc5; /* Old browsers */
+	background: -moz-linear-gradient(top,  #afbcc5 0%, #bccad3 65%, #c0ced7 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afbcc5), color-stop(65%,#bccad3), color-stop(100%,#c0ced7)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #afbcc5 0%,#bccad3 65%,#c0ced7 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #afbcc5 0%,#bccad3 65%,#c0ced7 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #afbcc5 0%,#bccad3 65%,#c0ced7 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #afbcc5 0%,#bccad3 65%,#c0ced7 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#afbcc5', endColorstr='#c0ced7',GradientType=0 ); /* IE6-9 */
+
+
+}
 .btn-submit{
 	background: #f97e76;
 	position: absolute;
 	right: 20px
+}
+.btn-submit:hover{
+	border: 1px solid #e3736c;
+	background: #e37368; /* Old browsers */
+	background: -moz-linear-gradient(top,  #e37368 0%, #ef7a71 11%, #ef7870 16%, #f57c74 51%, #f87d76 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e37368), color-stop(11%,#ef7a71), color-stop(16%,#ef7870), color-stop(51%,#f57c74), color-stop(100%,#f87d76)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #e37368 0%,#ef7a71 11%,#ef7870 16%,#f57c74 51%,#f87d76 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #e37368 0%,#ef7a71 11%,#ef7870 16%,#f57c74 51%,#f87d76 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #e37368 0%,#ef7a71 11%,#ef7870 16%,#f57c74 51%,#f87d76 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #e37368 0%,#ef7a71 11%,#ef7870 16%,#f57c74 51%,#f87d76 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e37368', endColorstr='#f87d76',GradientType=0 ); /* IE6-9 */
 }
 
 /*
@@ -522,6 +570,10 @@ side-menu
 	padding: 4px 0;
 	display: block;
 	text-align: center;
+	-webkit-transition: color 0.2s ease-out 0s;
+	-moz-transition: color 0.2s ease-out 0s;
+	-o-transition: color 0.2s ease-out 0s;
+	transition: color 0.2s ease-out 0s;
 }
 .languages__link:hover{
 	color: #444a53;
